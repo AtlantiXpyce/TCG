@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +9,9 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState(null);
+
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -36,7 +39,7 @@ const Register = () => {
     }
 
     if (!lastName.trim()) {
-      newErrors.lastName = "Los apellidos son obligatorio";
+      newErrors.lastName = "Los apellidos son obligatorios";
     }
 
     setErrors(newErrors);
@@ -44,10 +47,38 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log({ username, password, email, firstName, lastName });
+    setServerError(null);
+
+    if (!validate()) {
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          email,
+          firstName,
+          lastName,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorMsg = await response.text();
+        setServerError(errorMsg || "Error al registrar usuario");
+        return;
+      }
+      navigate("/login");
+    } catch (error) {
+      setServerError("Error de conexión con el servidor");
+      console.error(error);
     }
   };
 
@@ -57,14 +88,13 @@ const Register = () => {
         <div className="card-body p-4">
           <h3 className="card-title text-center mb-4">Registrarse</h3>
           <form onSubmit={handleSubmit} noValidate>
-            
             <div className="mb-3">
               <input
                 id="firstName"
                 type="text"
                 className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
                 value={firstName}
-                onChange={e => setFirstName(e.target.value)}
+                onChange={(e) => setFirstName(e.target.value)}
                 placeholder="Nombre"
                 autoComplete="given-name"
               />
@@ -77,20 +107,20 @@ const Register = () => {
                 type="text"
                 className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
                 value={lastName}
-                onChange={e => setLastName(e.target.value)}
+                onChange={(e) => setLastName(e.target.value)}
                 placeholder="Apellidos"
                 autoComplete="family-name"
               />
               {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
             </div>
-            
+
             <div className="mb-3">
               <input
                 id="username"
                 type="text"
                 className={`form-control ${errors.username ? "is-invalid" : ""}`}
                 value={username}
-                onChange={e => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Nombre de usuario"
                 autoComplete="username"
               />
@@ -103,7 +133,7 @@ const Register = () => {
                 type="password"
                 className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
                 autoComplete="new-password"
               />
@@ -116,12 +146,18 @@ const Register = () => {
                 type="email"
                 className={`form-control ${errors.email ? "is-invalid" : ""}`}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Correo electrónico"
                 autoComplete="email"
               />
               {errors.email && <div className="invalid-feedback">{errors.email}</div>}
             </div>
+
+            {serverError && (
+              <div className="alert alert-danger" role="alert">
+                {serverError}
+              </div>
+            )}
 
             <button type="submit" className="btn btn-primary w-100">
               Crear cuenta
@@ -130,7 +166,9 @@ const Register = () => {
           <div className="text-center mt-3">
             <small>
               ¿Ya tienes cuenta?{" "}
-              <Link to="/login" className="link-primary">Iniciar sesión</Link>
+              <Link to="/login" className="link-primary">
+                Iniciar sesión
+              </Link>
             </small>
           </div>
         </div>

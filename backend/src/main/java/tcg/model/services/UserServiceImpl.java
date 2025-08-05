@@ -1,16 +1,16 @@
 package tcg.model.services;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.AlreadyExistsException;
 import tcg.model.exceptions.UserNotFoundException;
-
-import java.util.Optional;
 
 
 @Service
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
     public User login(String username, String password) throws UserNotFoundException{
         Optional<User> user = userDao.findByUsernameIgnoreCase(username);
         
-        if(user.isPresent()){
+        if(!user.isPresent()){
             throw new UserNotFoundException(username);
         }
         if(!passwordEncoder.matches(password, user.get().getPassword())){

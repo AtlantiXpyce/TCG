@@ -14,11 +14,11 @@ import tcg.model.entities.User;
 import tcg.model.exceptions.AlreadyExistsException;
 import tcg.model.exceptions.UserNotFoundException;
 import tcg.model.services.UserService;
+import tcg.rest.common.JwtGenerator;
 import tcg.rest.dtos.LoginRequest;
+import tcg.rest.dtos.LoginResponse;
 import tcg.rest.dtos.RegisterRequest;
 import tcg.rest.dtos.UserResponse;
-import tcg.rest.dtos.LoginResponse;
-import tcg.rest.common.JwtGenerator;
 
 @RestController
 @RequestMapping("/user")
@@ -33,6 +33,11 @@ public class UserController {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<String> handleAlreadyExistsException(AlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleAlreadyExistsException(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @PostMapping("/register")
