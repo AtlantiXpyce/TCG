@@ -1,20 +1,38 @@
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import Header from './modules/app/Header';
-import Body from './modules/app/Body';
 import Footer from './modules/app/Footer';
+import Login from './modules/user/components/Login';
+import Register from './modules/user/components/Register';
+
+const Content = () => {
+  const location = useLocation();
+
+  const hideHeaderPath = ["/login", "/register"];
+  const hideHeader = hideHeaderPath.includes(location.pathname);
+
+  return (
+    <>
+      {!hideHeader && <Header />}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   const [search, setSearch] = useState("");
 
   return (
-    <>
-      <Header search={search} setSearch={setSearch} />
-      <Body />
+    <div>
+      <Content search={search} setSearch={setSearch} />
       <Footer />
-    </>
+    </div>
   );
 }
 
