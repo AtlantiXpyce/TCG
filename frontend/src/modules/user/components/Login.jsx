@@ -30,6 +30,7 @@ const Login = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.id);
       navigate("/");
     } catch (err) {
       setError("Error de conexión");

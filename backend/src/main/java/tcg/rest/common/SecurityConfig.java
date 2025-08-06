@@ -1,5 +1,7 @@
 package tcg.rest.common;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,8 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +34,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.GET, "/user/**").hasRole("USER")
+                .anyRequest().denyAll()
             );
 
         return http.build();

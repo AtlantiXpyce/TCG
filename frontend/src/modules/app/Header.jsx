@@ -3,10 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 function Header({ search, setSearch }) {
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
     navigate("/login");
   };
 
@@ -24,7 +27,7 @@ function Header({ search, setSearch }) {
 
         {username ? (
           <div className="d-flex align-items-center gap-3">
-            <Link to="/profile" className="text-decoration-none fw-bold">
+            <Link to={`/profile/${userId}`} className="text-decoration-none fw-bold">
               {username}
             </Link>
             <button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
