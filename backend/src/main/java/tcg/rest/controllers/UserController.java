@@ -60,6 +60,6 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws UserNotFoundException {
         User user = userService.login(request.getUsername(), request.getPassword());
         String token = jwtGenerator.generateToken(user.getUsername());
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole()));
     }
 }
