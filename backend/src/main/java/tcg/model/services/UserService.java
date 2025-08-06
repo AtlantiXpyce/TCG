@@ -10,5 +10,6 @@ public interface UserService {
 
     User login (String userName, String password) throws UserNotFoundException; 
     
-    //
+    User getUser (Long id) throws UserNotFoundException;
+
 }

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import tcg.rest.common.JwtGenerator;
 import tcg.rest.dtos.LoginRequest;
 import tcg.rest.dtos.LoginResponse;
 import tcg.rest.dtos.RegisterRequest;
+import tcg.rest.dtos.UserProfileDto;
 import tcg.rest.dtos.UserResponse;
 
 @RestController
@@ -55,11 +58,16 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws UserNotFoundException {
         User user = userService.login(request.getUsername(), request.getPassword());
-        String token = jwtGenerator.generateToken(user.getUsername());
-        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole()));
+        String token = jwtGenerator.generateToken(user.getUsername(),user.getRole());
+        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole(), user.getId()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserProfileDto> profile(@PathVariable Long id) throws UserNotFoundException{
+        User user = userService.getUser(id);
+        return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore()));
     }
 }

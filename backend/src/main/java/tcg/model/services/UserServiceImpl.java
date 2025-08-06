@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
         if(userDao.existsByUsername(username)){
             throw new AlreadyExistsException(username);
         }else{
-            user.setRole("User");
+            user.setRole("USER");
             user.setStore(false);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userDao.save(user);
@@ -42,12 +42,22 @@ public class UserServiceImpl implements UserService{
         Optional<User> user = userDao.findByUsernameIgnoreCase(username);
         
         if(!user.isPresent()){
-            throw new UserNotFoundException(username);
+            throw new UserNotFoundException();
         }
         if(!passwordEncoder.matches(password, user.get().getPassword())){
-            throw new UserNotFoundException(username);
+            throw new UserNotFoundException();
         }
 
         return user.get();
     }
+
+    @Override
+    public User getUser(Long id) throws UserNotFoundException{
+        Optional<User> user = userDao.findById(id);
+        if(!user.isPresent()){
+            throw new UserNotFoundException();
+        }
+        return user.get();
+    }
+
 }
