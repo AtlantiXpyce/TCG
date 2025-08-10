@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -20,6 +21,8 @@ public class Card {
     private Rarity rarity;
     private String cardNumber;
     private String artVariant;
+    @Lob
+    private byte[] imagen;
     
     public Card() {}
 
@@ -94,5 +97,13 @@ public class Card {
 
     public void setArtVariant(String artVariant) {
         this.artVariant = artVariant;
+    }
+
+    public byte[] getImagen(){
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen){
+        this.imagen = imagen;
     }
 }
