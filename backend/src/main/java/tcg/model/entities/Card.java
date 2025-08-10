@@ -17,7 +17,7 @@ public class Card {
     private Long id;
 	private String name;
     private Tcg tcg;
-    private Set set;
+    private CardSet set;
     private Rarity rarity;
     private String cardNumber;
     private String artVariant;
@@ -26,7 +26,7 @@ public class Card {
     
     public Card() {}
 
-    public Card(String name, Tcg tcg, Set set, Rarity rarity, String cardNumber, String artVariant) {
+    public Card(String name, Tcg tcg, CardSet set, Rarity rarity, String cardNumber, String artVariant) {
         this.name = name;
         this.tcg = tcg;
         this.set = set;
@@ -65,11 +65,11 @@ public class Card {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "setId")
-    public Set getSet() {
+    public CardSet getSet() {
         return set;
     }
 
-    public void setSet(Set cardSet) {
+    public void setSet(CardSet cardSet) {
         this.set = cardSet;
     }
 

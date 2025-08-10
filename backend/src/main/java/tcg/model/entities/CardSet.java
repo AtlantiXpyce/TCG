@@ -9,14 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Set {
+public class CardSet {
     private Long id;
 	private String name;
     private Tcg tcg;
     
-    public Set() {}
+    public CardSet() {}
 
-    public Set(String name, Tcg tcg) {
+    public CardSet(String name, Tcg tcg) {
         this.name = name;
         this.tcg = tcg;
     }

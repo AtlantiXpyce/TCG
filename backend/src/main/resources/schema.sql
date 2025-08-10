@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS orderLine;
-DROP TABLE IF EXISTS orderTable;
-DROP TABLE IF EXISTS cart;
-DROP TABLE IF EXISTS cardStock;
-DROP TABLE IF EXISTS card;
-DROP TABLE IF EXISTS cardSet;
-DROP TABLE IF EXISTS rarity;
-DROP TABLE IF EXISTS tcg;
-DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS orderLine CASCADE;
+DROP TABLE IF EXISTS orderTable CASCADE;
+DROP TABLE IF EXISTS cart CASCADE;
+DROP TABLE IF EXISTS cardStock CASCADE;
+DROP TABLE IF EXISTS card CASCADE;
+DROP TABLE IF EXISTS cardSet CASCADE;
+DROP TABLE IF EXISTS rarity CASCADE;
+DROP TABLE IF EXISTS tcg CASCADE;
+DROP TABLE IF EXISTS location CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -70,7 +70,7 @@ CREATE TABLE cardStock (
     condition VARCHAR(50) NOT NULL,
     comment VARCHAR(100),
     FOREIGN KEY (cardId) REFERENCES card(id),
-    FOREIGN KEY (sellerId) REFERENCES "user"(id)
+    FOREIGN KEY (sellerId) REFERENCES users(id)
 );
 
 CREATE TABLE cart (
@@ -79,7 +79,7 @@ CREATE TABLE cart (
     quantity INT NOT NULL,
     userId INT NOT NULL,
     FOREIGN KEY (cardStockId) REFERENCES cardStock(id),
-    FOREIGN KEY (userId) REFERENCES "user"(id)
+    FOREIGN KEY (userId) REFERENCES users(id)
 );
 
 CREATE TABLE orderTable (
@@ -107,10 +107,10 @@ INSERT INTO tcg (name) VALUES
 ('Magic: The Gathering');
 
 INSERT INTO cardSet (name, tcgId, amount) VALUES
-('Base Set', 1),
-('Jungle', 1),
-('Alpha', 2),
-('Aetherdrift', 2);
+('Base Set', 1, 102),
+('Jungle', 1, 64),
+('Alpha', 2, 295),
+('Aetherdrift', 2, 291);
 
 INSERT INTO rarity (name, tcgId) VALUES
 ('Common', 1),
@@ -121,8 +121,7 @@ INSERT INTO rarity (name, tcgId) VALUES
 ('Rare', 2),
 ('Mythic Rare', 2);
 
-INSERT INTO card (name, tcgId, setId, rarityId, cardNumber, artVariant, image)
-VALUES  
+INSERT INTO card (name, tcgId, setId, rarityId, cardNumber, artVariant, imagen) VALUES
 ('Pikachu', 1, 1, 1, '58', 'Base', null),
 ('Charizard', 1, 1, 3, '4', 'Base', null),
 ('Blastoise', 1, 1, 3, '2', 'Base', null),
