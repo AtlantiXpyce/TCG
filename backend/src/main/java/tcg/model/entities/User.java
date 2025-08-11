@@ -1,5 +1,6 @@
 package tcg.model.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -70,7 +71,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    
+    @Column(name = "isStore")
     public boolean isStore() {
         return isStore;
     }

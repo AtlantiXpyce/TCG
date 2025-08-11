@@ -103,7 +103,7 @@ CREATE TABLE orderLine (
 );
 
 INSERT INTO tcg (name) VALUES
-('Pokémon'),
+(E'Pok\u00E9mon'),
 ('Magic: The Gathering');
 
 INSERT INTO cardSet (name, tcgId, amount) VALUES
