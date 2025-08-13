@@ -54,7 +54,7 @@ public class Card {
     }
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tcgId")
+    @JoinColumn(name = "tcgid")
     public Tcg getTcg() {
         return tcg;
     }
@@ -64,7 +64,7 @@ public class Card {
     }
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "setId")
+    @JoinColumn(name = "setid")
     public CardSet getSet() {
         return set;
     }
@@ -74,7 +74,7 @@ public class Card {
     }
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "rarityId")
+    @JoinColumn(name = "rarityid")
     public Rarity getRarity() {
         return rarity;
     }

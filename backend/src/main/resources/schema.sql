@@ -49,37 +49,37 @@ CREATE TABLE rarity (
 CREATE TABLE card (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    tcgId INT NOT NULL,
-    setId INT NOT NULL,
-    rarityId INT NOT NULL,
+    tcgid INT NOT NULL,
+    setid INT NOT NULL,
+    rarityid INT NOT NULL,
     cardNumber VARCHAR(20) NOT NULL,
     artVariant VARCHAR(100),
     imagen BYTEA,
-    FOREIGN KEY (tcgId) REFERENCES tcg(id),
-    FOREIGN KEY (setId) REFERENCES cardSet(id),
-    FOREIGN KEY (rarityId) REFERENCES rarity(id)
+    FOREIGN KEY (tcgid) REFERENCES tcg(id),
+    FOREIGN KEY (setid) REFERENCES cardSet(id),
+    FOREIGN KEY (rarityid) REFERENCES rarity(id)
 );
 
 CREATE TABLE cardStock (
     id SERIAL PRIMARY KEY,
-    cardId INT NOT NULL,
-    sellerId INT NOT NULL,
+    cardid INT NOT NULL,
+    sellerid INT NOT NULL,
     language VARCHAR(50) NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
     comment VARCHAR(100),
-    FOREIGN KEY (cardId) REFERENCES card(id),
-    FOREIGN KEY (sellerId) REFERENCES users(id)
+    FOREIGN KEY (cardid) REFERENCES card(id),
+    FOREIGN KEY (sellerid) REFERENCES users(id)
 );
 
 CREATE TABLE cart (
     id SERIAL PRIMARY KEY,
-    cardStockId INT NOT NULL,
+    cardStockid INT NOT NULL,
     quantity INT NOT NULL,
-    userId INT NOT NULL,
-    FOREIGN KEY (cardStockId) REFERENCES cardStock(id),
-    FOREIGN KEY (userId) REFERENCES users(id)
+    userid INT NOT NULL,
+    FOREIGN KEY (cardStockid) REFERENCES cardStock(id),
+    FOREIGN KEY (userid) REFERENCES users(id)
 );
 
 CREATE TABLE orderTable (
@@ -92,27 +92,27 @@ CREATE TABLE orderTable (
 
 CREATE TABLE orderLine (
     id SERIAL PRIMARY KEY,
-    orderId INT NOT NULL,
-    cardId INT NOT NULL,
+    orderid INT NOT NULL,
+    cardid INT NOT NULL,
     language VARCHAR(50) NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
-    FOREIGN KEY (orderId) REFERENCES orderTable(id),
-    FOREIGN KEY (cardId) REFERENCES card(id)
+    FOREIGN KEY (orderid) REFERENCES orderTable(id),
+    FOREIGN KEY (cardid) REFERENCES card(id)
 );
 
 INSERT INTO tcg (name) VALUES
 (E'Pok\u00E9mon'),
 ('Magic: The Gathering');
 
-INSERT INTO cardSet (name, tcgId, amount) VALUES
+INSERT INTO cardSet (name, tcgid, amount) VALUES
 ('Base Set', 1, 102),
 ('Jungle', 1, 64),
 ('Alpha', 2, 295),
 ('Aetherdrift', 2, 291);
 
-INSERT INTO rarity (name, tcgId) VALUES
+INSERT INTO rarity (name, tcgid) VALUES
 ('Common', 1),
 ('Uncommon', 1),
 ('Holo Rare', 1),
@@ -121,7 +121,7 @@ INSERT INTO rarity (name, tcgId) VALUES
 ('Rare', 2),
 ('Mythic Rare', 2);
 
-INSERT INTO card (name, tcgId, setId, rarityId, cardNumber, artVariant, imagen) VALUES
+INSERT INTO card (name, tcgid, setid, rarityid, cardNumber, artVariant, imagen) VALUES
 ('Pikachu', 1, 1, 1, '58', 'Base', null),
 ('Charizard', 1, 1, 3, '4', 'Base', null),
 ('Blastoise', 1, 1, 3, '2', 'Base', null),
@@ -133,4 +133,10 @@ INSERT INTO card (name, tcgId, setId, rarityId, cardNumber, artVariant, imagen) 
 ('Snorlax', 1, 2, 3, '11', 'Base', null),
 ('Flareon', 1, 2, 3, '3', 'Base', null),
 ('Scyther', 1, 2, 2, '10', 'Base', null),
-('Pidgeot', 1, 2, 3, '8', 'Base', null);
+('Pidgeot', 1, 2, 3, '8', 'Base', null),
+('Black lotus', 2, 3, 6, '50', 'Base', null),
+('Ancestral Recall', 2, 3, 6, '23', 'Base', null),
+('Cursed Land', 2, 2, 5, '84', 'Base', null),
+('The Aetherspark', 2, 4, 7, '231', 'Base', null),
+('Chandra, Spark Hunter', 2, 4, 7, '411', 'Fracture Foil', null),
+('Chandra, Spark Hunter ', 2, 4, 7, '401', 'Foil', null);
