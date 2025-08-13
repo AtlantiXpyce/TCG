@@ -9,6 +9,8 @@ import Login from './modules/user/components/Login';
 import Register from './modules/user/components/Register';
 import UserProfile from './modules/user/components/Profile';
 import CardDetails from "./modules/cards/components/CardDetails";
+import CardSearch from './modules/cards/components/CardSearch';
+
 
 const Content = () => {
   const location = useLocation();
@@ -20,6 +22,7 @@ const Content = () => {
     <>
       {!hideHeader && <Header />}
       <Routes>
+        <Route path="/" element ={<CardSearch/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:id" element={<UserProfile />} />
@@ -30,11 +33,10 @@ const Content = () => {
 }
 
 function App() {
-  const [search, setSearch] = useState("");
 
   return (
     <div>
-      <Content search={search} setSearch={setSearch} />
+      <Content/>
       <Footer />
     </div>
   );
