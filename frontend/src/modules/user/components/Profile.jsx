@@ -1,10 +1,34 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import markerIconPng from 'leaflet/dist/images/marker-icon.png';
+import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
 
 const UserProfile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
+  const [selectedPos, setSelectedPos] = useState(null);
+
+  const markerIcon = new L.Icon({
+    iconUrl: markerIconPng,
+    shadowUrl: markerShadowPng,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    shadowSize: [41, 41],
+    shadowAnchor: [12, 41],
+  });
+
+  const LocationSelector = () => {
+    useMapEvents({
+      click(e) {
+        setSelectedPos(e.latlng);
+      },
+    });
+    return selectedPos ? <Marker position={selectedPos} icon={markerIcon} /> : null;
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -13,7 +37,7 @@ const UserProfile = () => {
 
         const response = await fetch(`http://localhost:8080/user/${id}`, {
           headers: {
-            "Authorization": token ? `Bearer ${token}` : "",
+            Authorization: token ? `Bearer ${token}` : "",
           },
         });
 
@@ -25,6 +49,9 @@ const UserProfile = () => {
 
         const data = await response.json();
         setProfile(data);
+        if (data.store && typeof data.latitude === "number" && typeof data.longitude === "number") {
+          setSelectedPos({ lat: data.latitude, lng: data.longitude });
+        }
       } catch (err) {
         setError("Error de conexión con el servidor");
         console.error(err);
@@ -34,9 +61,45 @@ const UserProfile = () => {
     fetchProfile();
   }, [id]);
 
+  const handleEnableStore = async () => {
+    if (!selectedPos) {
+      alert("Por favor selecciona una ubicación en el mapa");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response2 = await fetch(`http://localhost:8080/user/enableStore`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({
+          id: profile.id,
+          latitude: selectedPos.lat,
+          longitude: selectedPos.lng,
+        }),
+      });
+
+      if (!response2.ok) {
+        const msg = await response2.text();
+        alert(msg || "No se pudo habilitar la tienda");
+        return;
+      }
+
+      alert("Ahora eres tienda");
+      window.location.reload();
+    } catch (err) {
+      alert("Error al conectar con el servidor");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="d-flex vh-100 align-items-center justify-content-center bg-light">
-      <div className="card shadow-sm" style={{ maxWidth: 400, width: "100%" }}>
+      <div className="card shadow-sm" style={{ maxWidth: 500, width: "100%" }}>
         <div className="card-body p-4">
           <h3 className="card-title text-center mb-4">Perfil de usuario</h3>
 
@@ -45,7 +108,7 @@ const UserProfile = () => {
               {error}
             </div>
           )}
-          
+
           {profile && (
             <>
               <div className="mb-3">
@@ -57,6 +120,29 @@ const UserProfile = () => {
               <div className="mb-3">
                 <strong>¿Es tienda?:</strong> {profile.store ? "Sí" : "No"}
               </div>
+
+              {(profile && (profile.store ? selectedPos : true)) && (
+                <MapContainer
+                  center={selectedPos || { lat: 40.4168, lng: -3.7038 }}
+                  zoom={13}
+                  style={{ height: "300px", width: "100%" }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://osm.org">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  {profile.store && selectedPos && <Marker position={selectedPos} icon={markerIcon} />}
+                  {!profile.store && <LocationSelector />}
+                </MapContainer>
+              )}
+              {!profile.store && (
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={handleEnableStore}
+                >
+                  Hacerme tienda
+                </button>
+              )}
             </>
           )}
 
