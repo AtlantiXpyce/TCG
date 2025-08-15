@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import tcg.model.entities.User;
 import tcg.model.exceptions.AlreadyExistsException;
+import tcg.model.exceptions.AlreadyStoreException;
 import tcg.model.exceptions.IncorrectParamsException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
@@ -57,6 +58,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
+    @ExceptionHandler(AlreadyStoreException.class)
+    public ResponseEntity<String> handleAlreadyStoreException(AlreadyStoreException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) throws AlreadyExistsException {
@@ -83,11 +88,15 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserProfileDto> profile(@PathVariable Long id) throws UserNotFoundException{
         User user = userService.getUser(id);
-        return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore()));
+        if(user.isStore()){
+            return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),user.getLocation().getLongitude(),user.getLocation().getLatitude()));
+        }else
+        return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),Double.valueOf(190),Double.valueOf(190)));
+        
     }
     
     @PostMapping("/enableStore")
-    public ResponseEntity<String> enableStore(@Valid @RequestBody StoreParamsDto storeParams, HttpServletRequest request) throws IncorrectParamsException, NotTheUserException, UserNotFoundException{
+    public ResponseEntity<String> enableStore(@Valid @RequestBody StoreParamsDto storeParams, HttpServletRequest request) throws IncorrectParamsException, NotTheUserException, UserNotFoundException, AlreadyStoreException{
         
         String token = request.getHeader("Authorization").substring(7);
         Long authId = jwtGenerator.getIdFromToken(token);

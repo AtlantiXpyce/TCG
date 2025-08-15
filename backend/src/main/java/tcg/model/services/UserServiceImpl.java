@@ -12,6 +12,7 @@ import tcg.model.entities.LocationDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.AlreadyExistsException;
+import tcg.model.exceptions.AlreadyStoreException;
 import tcg.model.exceptions.IncorrectParamsException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
@@ -70,21 +71,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void userBecomesStore(Long id, Double latitude, Double longitude) throws NotTheUserException, IncorrectParamsException, UserNotFoundException{
+    public void userBecomesStore(Long id, Double latitude, Double longitude) throws AlreadyStoreException, NotTheUserException, IncorrectParamsException, UserNotFoundException{
         Optional<User> userAux = userDao.findById(id);
-
+        
         if(userAux.isEmpty()){
             throw new UserNotFoundException();
         }
 
+        User user = userAux.get();
+        if(user.isStore()){
+            throw new AlreadyStoreException();
+        }
         if (latitude == null || longitude == null ||
             latitude < -90 || latitude > 90 ||
             longitude < -180 || longitude > 180) {
                 throw new IncorrectParamsException();
         }
 
-        User user = userAux.get();
-        Location location = null;
+        Location location = new Location();
         
         location.setLatitude(latitude);
         location.setLongitude(longitude);
