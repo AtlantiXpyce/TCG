@@ -33,9 +33,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void register(User user) throws AlreadyExistsException{
         String username = user.getUsername();
-
+        String email = user.getEmail();
         if(userDao.existsByUsername(username)){
             throw new AlreadyExistsException(username);
+        }else if (userDao.existsByEmail(email)){
+            throw new AlreadyExistsException(email);
         }else{
             user.setRole("USER");
             user.setStore(false);

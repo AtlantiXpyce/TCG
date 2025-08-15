@@ -8,5 +8,7 @@ public interface UserDao extends CrudRepository<User, Long>{
 
     boolean existsByUsername(String username);
 
+    boolean existsByEmail(String email);
+
     Optional<User> findByUsernameIgnoreCase(String userName);
 }
