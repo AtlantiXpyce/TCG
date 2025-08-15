@@ -10,6 +10,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import tcg.model.entities.User;
 
 @Component
 public class JwtGenerator {
@@ -18,12 +19,13 @@ public class JwtGenerator {
 
     private final long expiration = 36000000;
 
-    public String generateToken(String username, String role) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("role", role);
+    public String generateToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("role", user.getRole());
+        claims.put("id", user.getId() );
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(user.getUsername())
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -59,4 +61,15 @@ public class JwtGenerator {
 
         return claims.get("role", String.class);
     }
+
+    public Long getIdFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("id", Long.class);
+    }
+
 }

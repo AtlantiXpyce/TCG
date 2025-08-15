@@ -1,7 +1,9 @@
 package tcg.rest.common;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,11 +46,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
 
+            Long userId = jwtGenerator.getIdFromToken(token);
             String username = jwtGenerator.getUsernameFromToken(token);
             String role = jwtGenerator.getRoleFromToken(token);
 
             request.setAttribute("serviceToken", token);
-            configureSecurityContext(username, role);
+            configureSecurityContext(userId, username, role);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,19 +62,19 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void configureSecurityContext(String userName, String role) {
+    private void configureSecurityContext(Long userId, String userName, String role) {
         if (role == null || role.isEmpty()) {
-            return; // No configuramos contexto si no hay rol
+            return;
         }
-
-        // Crea una authority con prefijo ROLE_
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
-        // Crea el token de autenticación
-        UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(userName, null, authorities);
+        Map<String, Object> userData = new HashMap<>();
+            userData.put("id", userId);
+            userData.put("userName", userName);
 
-        // Establece el contexto de seguridad
+        UsernamePasswordAuthenticationToken authToken =
+            new UsernamePasswordAuthenticationToken(userData, null, authorities);
+
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
