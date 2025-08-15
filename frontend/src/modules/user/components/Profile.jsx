@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -11,15 +11,20 @@ const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
   const [selectedPos, setSelectedPos] = useState(null);
+  const [showMap, setShowMap] = useState(false);
 
-  const markerIcon = new L.Icon({
-    iconUrl: markerIconPng,
-    shadowUrl: markerShadowPng,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    shadowSize: [41, 41],
-    shadowAnchor: [12, 41],
-  });
+  const markerIcon = useMemo(
+    () =>
+      new L.Icon({
+        iconUrl: markerIconPng,
+        shadowUrl: markerShadowPng,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        shadowSize: [41, 41],
+        shadowAnchor: [12, 41],
+      }),
+    []
+  );
 
   const LocationSelector = () => {
     useMapEvents({
@@ -89,8 +94,9 @@ const UserProfile = () => {
         return;
       }
 
+      setProfile({ ...profile, store: true, latitude: selectedPos.lat, longitude: selectedPos.lng });
+      setShowMap(false);
       alert("Ahora eres tienda");
-      window.location.reload();
     } catch (err) {
       alert("Error al conectar con el servidor");
       console.error(err);
@@ -117,31 +123,55 @@ const UserProfile = () => {
               <div className="mb-3">
                 <strong>Nombre:</strong> {profile.firstName}
               </div>
-              <div className="mb-3">
-                <strong>¿Es tienda?:</strong> {profile.store ? "Sí" : "No"}
+              <div className="mb-3 d-flex align-items-center justify-content-between">
+                <div>
+                  <strong>¿Es tienda?:</strong> {profile.store ? "Sí" : "No"}
+                </div>
+                {!profile.store && !showMap && (
+                  <button className="btn btn-primary btn-sm" onClick={() => setShowMap(true)}>
+                    Volverse tienda
+                  </button>
+                )}
               </div>
 
-              {(profile && (profile.store ? selectedPos : true)) && (
-                <MapContainer
-                  center={selectedPos || { lat: 40.4168, lng: -3.7038 }}
-                  zoom={13}
-                  style={{ height: "300px", width: "100%" }}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://osm.org">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  {profile.store && selectedPos && <Marker position={selectedPos} icon={markerIcon} />}
-                  {!profile.store && <LocationSelector />}
-                </MapContainer>
+              {profile.store && (
+                <>
+                  <div className="mb-2">
+                    <strong>Localización:</strong>
+                  </div>
+                  {selectedPos && (
+                    <MapContainer
+                      center={selectedPos}
+                      zoom={13}
+                      style={{ height: "300px", width: "100%" }}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://osm.org">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={selectedPos} icon={markerIcon} />
+                    </MapContainer>
+                  )}
+                </>
               )}
-              {!profile.store && (
-                <button
-                  className="btn btn-primary w-100"
-                  onClick={handleEnableStore}
-                >
-                  Hacerme tienda
-                </button>
+
+              {!profile.store && showMap && (
+                <>
+                  <MapContainer
+                    center={selectedPos || { lat: 40.4168, lng: -3.7038 }}
+                    zoom={13}
+                    style={{ height: "300px", width: "100%" }}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://osm.org">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <LocationSelector />
+                  </MapContainer>
+                  <button className="btn btn-success w-100 mt-2" onClick={handleEnableStore}>
+                    Confirmar ubicación y volverse tienda
+                  </button>
+                </>
               )}
             </>
           )}
