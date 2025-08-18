@@ -1,8 +1,14 @@
 package tcg.model.entities;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 
 @Entity
@@ -16,6 +22,7 @@ public class CardStock {
     private int quantity;
     private String condition;
     private String comment;
+    private CardLanguage lang;
 
     public CardStock() {}
 
@@ -98,4 +105,15 @@ public class CardStock {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "lang")
+    public CardLanguage getLang() {
+        return lang;
+    }
+
+    public void setLang(CardLanguage lang) {
+        this.lang = lang;
+    }
+
 }

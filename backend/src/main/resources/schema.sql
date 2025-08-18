@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS orderLine CASCADE;
 DROP TABLE IF EXISTS orderTable CASCADE;
+DROP TABLE IF EXISTS cardLanguage CASCADE;
 DROP TABLE IF EXISTS cart CASCADE;
 DROP TABLE IF EXISTS cardStock CASCADE;
 DROP TABLE IF EXISTS card CASCADE;
@@ -48,6 +49,11 @@ CREATE TABLE rarity (
     FOREIGN KEY (tcgId) REFERENCES tcg(id)
 );
 
+CREATE TABLE cardLanguage (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE card (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -71,6 +77,8 @@ CREATE TABLE cardStock (
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
     comment VARCHAR(100),
+    lang INT NOT NULL,
+    FOREIGN KEY (lang) REFERENCES cardLanguage(id),
     FOREIGN KEY (cardid) REFERENCES card(id),
     FOREIGN KEY (sellerid) REFERENCES users(id)
 );
@@ -103,6 +111,11 @@ CREATE TABLE orderLine (
     FOREIGN KEY (orderid) REFERENCES orderTable(id),
     FOREIGN KEY (cardid) REFERENCES card(id)
 );
+
+INSERT INTO cardLanguage (name) VALUES
+('Español'),
+('Ing\u00E9s'),
+('Franc\u00E9s');
 
 INSERT INTO tcg (name) VALUES
 (E'Pok\u00E9mon'),
