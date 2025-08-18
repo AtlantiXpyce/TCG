@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS orderLine CASCADE;
 DROP TABLE IF EXISTS orderTable CASCADE;
+DROP TABLE IF EXISTS condition CASCADE;
 DROP TABLE IF EXISTS cardLanguage CASCADE;
 DROP TABLE IF EXISTS cart CASCADE;
 DROP TABLE IF EXISTS cardStock CASCADE;
@@ -49,9 +50,16 @@ CREATE TABLE rarity (
     FOREIGN KEY (tcgId) REFERENCES tcg(id)
 );
 
+CREATE TABLE condition (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    initial VARCHAR(5) NOT NULL
+);
+
 CREATE TABLE cardLanguage (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL,
+    code VARCHAR(5) NOT NULL
 );
 
 CREATE TABLE card (
@@ -75,9 +83,10 @@ CREATE TABLE cardStock (
     language VARCHAR(50) NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
-    condition VARCHAR(50) NOT NULL,
+    conditionid INT NOT NULL,
     comment VARCHAR(100),
     lang INT NOT NULL,
+    FOREIGN KEY (conditionid) REFERENCES condition(id),
     FOREIGN KEY (lang) REFERENCES cardLanguage(id),
     FOREIGN KEY (cardid) REFERENCES card(id),
     FOREIGN KEY (sellerid) REFERENCES users(id)
@@ -112,13 +121,20 @@ CREATE TABLE orderLine (
     FOREIGN KEY (cardid) REFERENCES card(id)
 );
 
-INSERT INTO cardLanguage (name) VALUES
-('Español'),
-('Ing\u00E9s'),
-('Franc\u00E9s');
+INSERT INTO condition (name, initial) VALUES
+('Perfecta','PF'),
+('Buena','GD'),
+('Usada','US'),
+('Muy usada','VU'),
+('Mala','BD');
+
+INSERT INTO cardLanguage (name, code) VALUES
+('Español', 'es'),
+('Ing\u00E9s', 'en'),
+('Franc\u00E9s', 'fr');
 
 INSERT INTO tcg (name) VALUES
-(E'Pok\u00E9mon'),
+('Pok\u00E9mon'),
 ('Magic: The Gathering');
 
 INSERT INTO cardSet (name, tcgid, amount) VALUES

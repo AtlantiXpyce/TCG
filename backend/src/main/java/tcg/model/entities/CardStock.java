@@ -17,19 +17,18 @@ public class CardStock {
     private Long id;
     private Card card;
     private User seller;
-    private String language;
     private BigDecimal price;
     private int quantity;
-    private String condition;
+    private Condition condition;
     private String comment;
     private CardLanguage lang;
 
     public CardStock() {}
 
-    public CardStock(Card card, User seller, String language, BigDecimal price, int quantity, String condition, String comment) {
+    public CardStock(Card card, User seller, BigDecimal price, int quantity, Condition condition, String comment, CardLanguage lang) {
         this.card = card;
         this.seller = seller;
-        this.language = language;
+        this.lang = lang;
         this.price = price;
         this.quantity = quantity;
         this.condition = condition;
@@ -66,14 +65,6 @@ public class CardStock {
         this.seller = seller;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -89,12 +80,14 @@ public class CardStock {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-    public String getCondition() {
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "conditionid")
+    public Condition getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(Condition condition) {
         this.condition = condition;
     }
 

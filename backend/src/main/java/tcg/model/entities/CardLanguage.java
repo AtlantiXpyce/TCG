@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 public class CardLanguage {
     private Long id;
 	private String name;
+    private String code;
     
     public CardLanguage() {}
 
@@ -36,4 +37,11 @@ public class CardLanguage {
 		this.name = name;
 	}
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+		this.code = code;
+	}
 }
