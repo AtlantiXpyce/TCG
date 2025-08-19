@@ -1,5 +1,4 @@
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -20,24 +19,24 @@ const Content = () => {
   const hideHeader = hideHeaderPath.includes(location.pathname);
 
   return (
-    <>
+    <main className="flex-grow-1">
       {!hideHeader && <Header />}
       <Routes>
-        <Route path="/" element ={<CardSearch/>} />
+        <Route path="/" element={<CardSearch />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/cards/:id" element={<CardDetails />} />
         <Route path="/sell/:cardId" element={<AddCardStock />} />
       </Routes>
-    </>
+    </main>
   );
-}
+};
 
 function App() {
 
   return (
-    <div>
+    <div className="d-flex flex-column min-vh-100">
       <Content/>
       <Footer />
     </div>
