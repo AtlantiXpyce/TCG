@@ -10,6 +10,7 @@ import Register from './modules/user/components/Register';
 import UserProfile from './modules/user/components/Profile';
 import CardDetails from "./modules/cards/components/CardDetails";
 import CardSearch from './modules/cards/components/CardSearch';
+import AddCardStock from "./modules/cardStock/components/AddCardStock.jsx";
 
 
 const Content = () => {
@@ -27,6 +28,7 @@ const Content = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/cards/:id" element={<CardDetails />} />
+        <Route path="/sell/:cardId" element={<AddCardStock />} />
       </Routes>
     </>
   );

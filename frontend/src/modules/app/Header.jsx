@@ -13,9 +13,14 @@ function Header() {
     navigate("/login");
   };
 
+  const goBack = () => {
+    navigate("/");
+  }
+
   return (
     <header className="bg-light p-3">
       <div className="container d-flex justify-content-between align-items-center">
+
         {username ? (
           <div className="d-flex align-items-center gap-3">
             <Link to={`/profile/${userId}`} className="text-decoration-none fw-bold">
@@ -30,6 +35,9 @@ function Header() {
             Iniciar sesión
           </Link>
         )}
+        <button className="btn btn-outline-primary btn-sm" onClick={goBack}>
+          Home
+        </button>
       </div>
     </header>
   );

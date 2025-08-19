@@ -129,11 +129,11 @@ INSERT INTO condition (name, initial) VALUES
 
 INSERT INTO cardLanguage (name, code) VALUES
 ('Español', 'es'),
-('Ing\u00E9s', 'en'),
-('Franc\u00E9s', 'fr');
+('Inglés', 'en'),
+('Francés', 'fr');
 
 INSERT INTO tcg (name) VALUES
-('Pok\u00E9mon'),
+('Pokémon'),
 ('Magic: The Gathering');
 
 INSERT INTO cardSet (name, tcgid, amount) VALUES

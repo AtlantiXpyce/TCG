@@ -50,11 +50,7 @@ public class CardStockController {
         String token = request.getHeader("Authorization").substring(7);
         Long authId = jwtGenerator.getIdFromToken(token);
 
-        if (!authId.equals(dto.getSellerId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no autorizado");
-        }
-
-        CardStock cardStock = cardStockService.createStock(dto.getCardId(), dto.getSellerId(), dto.getLanguageId(), dto.getPrice(), dto.getQuantity(), dto.getConditionId(), dto.getComment());
+        CardStock cardStock = cardStockService.createStock(dto.getCardId(), authId, dto.getLanguageId(), dto.getPrice(), dto.getQuantity(), dto.getConditionId(), dto.getComment());
 
         return ResponseEntity.ok(new CardStockDto());
     }

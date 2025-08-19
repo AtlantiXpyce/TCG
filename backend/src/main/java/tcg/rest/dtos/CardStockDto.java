@@ -6,7 +6,6 @@ public class CardStockDto {
 
     private Long id;
     private Long cardId;
-    private Long sellerId;
     private Long languageId;
     private BigDecimal price;
     private int quantity;
@@ -15,10 +14,9 @@ public class CardStockDto {
 
     public CardStockDto() {}
 
-    public CardStockDto(Long id, Long cardId, Long sellerId, Long languageId, BigDecimal price, int quantity, Long conditionId, String comment) {
+    public CardStockDto(Long id, Long cardId, Long languageId, BigDecimal price, int quantity, Long conditionId, String comment) {
         this.id = id;
         this.cardId = cardId;
-        this.sellerId = sellerId;
         this.languageId = languageId;
         this.price = price;
         this.quantity = quantity;
@@ -40,14 +38,6 @@ public class CardStockDto {
 
     public void setCardId(Long cardId) {
         this.cardId = cardId;
-    }
-
-    public Long getSellerId() {
-        return sellerId;
-    }
-
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
     }
 
     public Long getLanguageId() {
