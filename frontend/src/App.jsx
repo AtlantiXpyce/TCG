@@ -1,5 +1,4 @@
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -8,6 +7,10 @@ import Footer from './modules/app/Footer';
 import Login from './modules/user/components/Login';
 import Register from './modules/user/components/Register';
 import UserProfile from './modules/user/components/Profile';
+import CardDetails from "./modules/cards/components/CardDetails";
+import CardSearch from './modules/cards/components/CardSearch';
+import AddCardStock from "./modules/cardStock/components/AddCardStock.jsx";
+
 
 const Content = () => {
   const location = useLocation();
@@ -16,24 +19,25 @@ const Content = () => {
   const hideHeader = hideHeaderPath.includes(location.pathname);
 
   return (
-    <>
+    <main className="flex-grow-1">
       {!hideHeader && <Header />}
       <Routes>
+        <Route path="/" element={<CardSearch />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile/:id" element={<UserProfile />} />
-        
+        <Route path="/cards/:id" element={<CardDetails />} />
+        <Route path="/sell/:cardId" element={<AddCardStock />} />
       </Routes>
-    </>
+    </main>
   );
-}
+};
 
 function App() {
-  const [search, setSearch] = useState("");
 
   return (
-    <div>
-      <Content search={search} setSearch={setSearch} />
+    <div className="d-flex flex-column min-vh-100">
+      <Content/>
       <Footer />
     </div>
   );

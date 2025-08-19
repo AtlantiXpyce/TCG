@@ -1,24 +1,22 @@
 package tcg.model.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-public class Set {
+@Table(name = "cardLanguage")
+public class CardLanguage {
     private Long id;
 	private String name;
-    private Tcg tcg;
+    private String code;
     
-    public Set() {}
+    public CardLanguage() {}
 
-    public Set(String name, Tcg tcg) {
+    public CardLanguage(String name) {
         this.name = name;
-        this.tcg = tcg;
     }
 
 	@Id
@@ -39,13 +37,11 @@ public class Set {
 		this.name = name;
 	}
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tcgId")
-    public Tcg getTcg() {
-        return tcg;
+    public String getCode() {
+        return code;
     }
 
-    public void setTcg(Tcg tcg) {
-        this.tcg = tcg;
-    }
+    public void setCode(String code) {
+		this.code = code;
+	}
 }

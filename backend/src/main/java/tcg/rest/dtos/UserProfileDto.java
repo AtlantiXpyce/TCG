@@ -5,15 +5,19 @@ public class UserProfileDto {
     private String username;
     private String firstName;
     private boolean isStore;
+    private Double latitude;
+    private Double longitude;
 
     public UserProfileDto() {
     }
 
-    public UserProfileDto(Long id, String username, String firstName, boolean isStore) {
+    public UserProfileDto(Long id, String username, String firstName, boolean isStore, Double longitude, Double latitude) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.isStore = isStore;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public Long getId(){
@@ -46,5 +50,21 @@ public class UserProfileDto {
 
     public void setStore(boolean store) {
         isStore = store;
+    }
+
+    public Double getLatitude(){
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude){
+        this.latitude = latitude;
+    }
+    
+    public Double getLongitude(){
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude){
+        this.longitude = longitude;
     }
 }

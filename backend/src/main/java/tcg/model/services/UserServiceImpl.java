@@ -7,9 +7,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import tcg.model.entities.Location;
+import tcg.model.entities.LocationDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.AlreadyExistsException;
+import tcg.model.exceptions.AlreadyStoreException;
+import tcg.model.exceptions.IncorrectParamsException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 
 
@@ -21,14 +26,19 @@ public class UserServiceImpl implements UserService{
     private UserDao userDao;
 
     @Autowired
+    private LocationDao locationDao;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public void register(User user) throws AlreadyExistsException{
         String username = user.getUsername();
-
+        String email = user.getEmail();
         if(userDao.existsByUsername(username)){
             throw new AlreadyExistsException(username);
+        }else if (userDao.existsByEmail(email)){
+            throw new AlreadyExistsException(email);
         }else{
             user.setRole("USER");
             user.setStore(false);
@@ -60,4 +70,33 @@ public class UserServiceImpl implements UserService{
         return user.get();
     }
 
+    @Override
+    public void userBecomesStore(Long id, Double latitude, Double longitude) throws AlreadyStoreException, NotTheUserException, IncorrectParamsException, UserNotFoundException{
+        Optional<User> userAux = userDao.findById(id);
+        
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+
+        User user = userAux.get();
+        if(user.isStore()){
+            throw new AlreadyStoreException();
+        }
+        if (latitude == null || longitude == null ||
+            latitude < -90 || latitude > 90 ||
+            longitude < -180 || longitude > 180) {
+                throw new IncorrectParamsException();
+        }
+
+        Location location = new Location();
+        
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        location = locationDao.save(location);
+
+        user.setLocation(location);
+        user.setStore(true);
+
+        userDao.save(user);
+    }
 }
