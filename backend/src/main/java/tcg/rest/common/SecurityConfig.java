@@ -37,7 +37,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/user/**").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/cards/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/enableStore").hasRole("USER")
-                .requestMatchers(HttpMethod.POST, "/cardStock/add").hasRole("USER")                
+                .requestMatchers(HttpMethod.POST, "/cardStock/add").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/cardStock/languages").permitAll()
+                .requestMatchers(HttpMethod.GET, "/cardStock/conditions").permitAll()
                 .anyRequest().denyAll()
             );
 
