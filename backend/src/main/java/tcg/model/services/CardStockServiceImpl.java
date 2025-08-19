@@ -47,7 +47,7 @@ public class CardStockServiceImpl implements CardStockService{
     
     @Override
     public Page<CardStock> findStock(Long id, String language, Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return cardStockDao.findStock(id, (language == null || language.isBlank()) ? null : language, pageable);
     }
 
     @Override
