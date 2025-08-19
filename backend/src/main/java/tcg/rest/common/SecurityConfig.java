@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/user/**").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/cards/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/enableStore").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/cardStock/add").hasRole("USER")                
                 .anyRequest().denyAll()
             );
 

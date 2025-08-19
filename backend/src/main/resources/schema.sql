@@ -80,7 +80,6 @@ CREATE TABLE cardStock (
     id SERIAL PRIMARY KEY,
     cardid INT NOT NULL,
     sellerid INT NOT NULL,
-    language VARCHAR(50) NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     conditionid INT NOT NULL,
