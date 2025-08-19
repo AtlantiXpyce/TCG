@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/cardStock/add").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/cardStock/languages").permitAll()
                 .requestMatchers(HttpMethod.GET, "/cardStock/conditions").permitAll()
+                .requestMatchers(HttpMethod.GET, "/cardStock/find").hasRole("USER")
                 .anyRequest().denyAll()
             );
 

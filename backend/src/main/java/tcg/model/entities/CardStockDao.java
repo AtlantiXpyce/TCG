@@ -9,11 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface CardStockDao extends CrudRepository<CardStock, Long>, ListPagingAndSortingRepository<CardStock, Long> {
     
-    @Query("SELECT cs FROM CardStock cs " +
-       "WHERE cs.card.id = :cardId " +
-       "AND (:language IS NULL OR cs.lang.name = :language)")
-    Page<CardStock> findStock(@Param("cardId") Long cardId,
-                          @Param("language") String language,
-                          Pageable pageable);
+   @Query("""
+      SELECT cs FROM CardStock cs
+      WHERE cs.card.id = :cardId
+      AND (COALESCE(:language, '') = '' OR cs.lang.name = :language)
+   """)
+   Page<CardStock> findStock(@Param("cardId") Long cardId,
+                           @Param("language") String language,
+                           Pageable pageable);
 
 }

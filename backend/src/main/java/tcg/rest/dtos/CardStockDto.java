@@ -6,51 +6,60 @@ public class CardStockDto {
 
     private Long id;
     private Long cardId;
-    private Long languageId;
+    private Long sellerId;
+    private String language;
     private BigDecimal price;
     private int quantity;
-    private Long conditionId;
+    private String condition;
     private String comment;
 
     public CardStockDto() {}
 
-    public CardStockDto(Long id, Long cardId, Long languageId, BigDecimal price, int quantity, Long conditionId, String comment) {
+    public CardStockDto(Long id, Long cardId, Long sellerId, String language,
+                        BigDecimal price, int quantity, String condition, String comment) {
         this.id = id;
         this.cardId = cardId;
-        this.languageId = languageId;
+        this.sellerId = sellerId;
+        this.language = language;
         this.price = price;
         this.quantity = quantity;
-        this.conditionId = conditionId;
+        this.condition = condition;
         this.comment = comment;
     }
 
-    public Long getId() {
+    public Long getId() { 
         return id;
     }
-
-    public void setId(Long id) {
+    
+    public void setId(Long id) { 
         this.id = id;
     }
 
-    public Long getCardId() {
+    public Long getCardId() { 
         return cardId;
     }
-
-    public void setCardId(Long cardId) {
+    public void setCardId(Long cardId) { 
         this.cardId = cardId;
     }
 
-    public Long getLanguageId() {
-        return languageId;
+    public Long getSellerId() { 
+        return sellerId;
+    }
+    public void setSellerId(Long sellerId) { 
+        this.sellerId = sellerId;
     }
 
-    public void setLanguage(Long languageId) {
-        this.languageId = languageId;
+    public String getLanguage() {
+        return language;
+    }
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
+    
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
@@ -58,23 +67,23 @@ public class CardStockDto {
     public int getQuantity() {
         return quantity;
     }
-
+    
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public Long getConditionId() {
-        return conditionId;
+    public String getCondition() {
+        return condition;
     }
-
-    public void setConditionId(Long conditionId) {
-        this.conditionId = conditionId;
+    
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     public String getComment() {
         return comment;
     }
-
+    
     public void setComment(String comment) {
         this.comment = comment;
     }
