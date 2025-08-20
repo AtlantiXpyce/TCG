@@ -31,6 +31,7 @@ const Login = () => {
       localStorage.setItem("username", data.username);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.id);
+      localStorage.setItem("isStore", data.store);
       navigate("/");
     } catch (err) {
       setError("Error de conexión");

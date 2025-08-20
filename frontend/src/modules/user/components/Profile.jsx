@@ -96,6 +96,7 @@ const UserProfile = () => {
 
       setProfile({ ...profile, store: true, latitude: selectedPos.lat, longitude: selectedPos.lng });
       setShowMap(false);
+      localStorage.setItem("isStore", true);
       alert("Ahora eres tienda");
     } catch (err) {
       alert("Error al conectar con el servidor");
