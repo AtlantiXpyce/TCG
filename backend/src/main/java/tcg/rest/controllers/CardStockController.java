@@ -23,7 +23,6 @@ import tcg.model.services.CardLanguageService;
 import tcg.model.services.CardStockService;
 import tcg.model.services.ConditionService;
 import tcg.rest.common.JwtGenerator;
-import tcg.rest.dtos.AddCardStockConversor;
 import tcg.rest.dtos.AddCardStockDto;
 import tcg.rest.dtos.CardStockConversor;
 import tcg.rest.dtos.CardStockDto;
@@ -83,6 +82,6 @@ public class CardStockController {
         if(page == null || page < 0){
             page = 0;
         }
-        return PageRequest.of(page, 20);
+        return PageRequest.of(page, 10);
     }
 }
