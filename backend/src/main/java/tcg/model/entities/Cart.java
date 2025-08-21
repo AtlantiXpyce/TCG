@@ -1,6 +1,12 @@
 package tcg.model.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Cart {
@@ -11,6 +17,12 @@ public class Cart {
     private User user;
 
     public Cart() {}
+
+    public Cart(CardStock cardStock, int quantity, User user) {
+        this.cardStock = cardStock;
+        this.quantity = quantity;
+        this.user = user;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

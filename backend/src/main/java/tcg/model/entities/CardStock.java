@@ -19,6 +19,7 @@ public class CardStock {
     private User seller;
     private BigDecimal price;
     private int quantity;
+    private int cartQuantity;
     private Condition condition;
     private String comment;
     private CardLanguage lang;
@@ -33,6 +34,19 @@ public class CardStock {
         this.quantity = quantity;
         this.condition = condition;
         this.comment = comment;
+    }
+    
+    public CardStock(Long id, Card card, User seller, BigDecimal price, int quantity, int cartQuantity,
+            Condition condition, String comment, CardLanguage lang) {
+        this.id = id;
+        this.card = card;
+        this.seller = seller;
+        this.price = price;
+        this.quantity = quantity;
+        this.cartQuantity = cartQuantity;
+        this.condition = condition;
+        this.comment = comment;
+        this.lang = lang;
     }
 
     @Id
@@ -79,6 +93,14 @@ public class CardStock {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getCartQuantity() {
+        return cartQuantity;
+    }
+
+    public void setCartQuantity(int cartQuantity) {
+        this.cartQuantity = cartQuantity;
     }
     
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
