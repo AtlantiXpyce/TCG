@@ -1,15 +1,18 @@
 package tcg.rest.controllers;
 
 import java.security.InvalidParameterException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.EntityResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tcg.model.entities.Cart;
@@ -19,6 +22,8 @@ import tcg.model.exceptions.UserNotFoundException;
 import tcg.model.services.CartService;
 import tcg.rest.common.JwtGenerator;
 import tcg.rest.dtos.CartDto;
+import tcg.rest.dtos.CartLineDto;
+import tcg.rest.dtos.CartLineDtoConversor;
 
 
 @RestController
@@ -62,11 +67,15 @@ public class CartController {
         return ResponseEntity.ok(cart.getId());
     }
 
-    
-/*
     @GetMapping("")
-    public List<Cart> getCart(@RequestParam(required = true) Long id) {
-
+    public List<CartLineDto> getCart(HttpServletRequest request) throws UserNotFoundException {
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+        return CartLineDtoConversor.toCartLineDtos(cartService.getCart(authId));
     }
-*/
+
+    @PostMapping("/buy")
+    public EntityResponse<?> buyCart(HttpServletRequest request){
+        return null;
+    }
 }

@@ -1,6 +1,7 @@
 package tcg.model.services;
 
 import java.security.InvalidParameterException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,17 @@ public class CartServiceImpl implements CartService{
         cardStockDao.save(stock);
         
         return cartDao.save(cart);
+    }
+
+    @Override
+    public List<Cart> getCart(Long userId) throws UserNotFoundException {
+        Optional<User> userAux = userDao.findById(userId);
+
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+
+        return cartDao.findByUserId(userId);
     }
 
 }
