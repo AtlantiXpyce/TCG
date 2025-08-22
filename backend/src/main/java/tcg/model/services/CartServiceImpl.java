@@ -33,9 +33,10 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public Cart addToCart(Long cardStockId, int quantity, Long userId) throws CardStockNotFoundException, UserNotFoundException, QuantityExceededException, InvalidParameterException{
+        Cart cart;
         Optional<CardStock> stockAux = cardStockDao.findById(cardStockId);
         Optional<User> userAux = userDao.findById(userId);
-        
+        Optional<Cart> cartAux = cartDao.findByUserIdAndCartStockId(userId, cardStockId);
         if(quantity < 1){
             throw new InvalidParameterException();
         }
@@ -53,7 +54,12 @@ public class CartServiceImpl implements CartService{
             throw new QuantityExceededException();            
         }
 
-        Cart cart = new Cart(stock, quantity, userAux.get());
+        if(!cartAux.isEmpty()){
+            cart = cartAux.get();
+            cart.setQuantity(cart.getQuantity() + quantity);
+        }else{
+            cart = new Cart(stock, quantity, userAux.get());
+        }
 
         stock.setQuantity(stock.getQuantity()-quantity);
         stock.setCartQuantity(stock.getCartQuantity()+quantity);
