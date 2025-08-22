@@ -12,6 +12,7 @@ public interface CardStockDao extends CrudRepository<CardStock, Long>, ListPagin
    @Query("""
       SELECT cs FROM CardStock cs
       WHERE cs.card.id = :cardId
+      AND cs.quantity > 0
       AND (COALESCE(:language, '') = '' OR cs.lang.name = :language)
       ORDER BY cs.price ASC
    """)
