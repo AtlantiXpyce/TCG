@@ -17,6 +17,8 @@ import org.springframework.web.servlet.function.EntityResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import tcg.model.entities.Cart;
 import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.CartNotFoundException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.QuantityExceededException;
 import tcg.model.exceptions.UserNotFoundException;
 import tcg.model.services.CartService;
@@ -46,6 +48,11 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<String> handleCartNotFoundException(CartNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(QuantityExceededException.class)
     public ResponseEntity<String> handleQuantityExceededException(QuantityExceededException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -54,6 +61,11 @@ public class CartController {
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<String> handleInvalidParameterException(InvalidParameterException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotTheUserException.class)
+    public ResponseEntity<String> handleNotTheUserException(NotTheUserException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
     @PostMapping("")
@@ -74,6 +86,14 @@ public class CartController {
         return CartLineDtoConversor.toCartLineDtos(cartService.getCart(authId));
     }
 
+    @PostMapping("/delete")
+    public void deleteFromCart(@RequestBody Long cartId, HttpServletRequest request) throws CartNotFoundException, UserNotFoundException, NotTheUserException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+
+        cartService.deleteFromCart(cartId, authId);
+    }
+    
     @PostMapping("/buy")
     public EntityResponse<?> buyCart(HttpServletRequest request){
         return null;

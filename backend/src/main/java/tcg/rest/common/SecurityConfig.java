@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/cardStock/find").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/cart").authenticated()
                 .requestMatchers(HttpMethod.GET, "/cart").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cart/delete").authenticated()
                 .anyRequest().denyAll()
             );
 

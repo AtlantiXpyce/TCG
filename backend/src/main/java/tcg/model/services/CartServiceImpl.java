@@ -15,6 +15,8 @@ import tcg.model.entities.CartDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.CartNotFoundException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.QuantityExceededException;
 import tcg.model.exceptions.UserNotFoundException;
 
@@ -77,6 +79,36 @@ public class CartServiceImpl implements CartService{
         }
 
         return cartDao.findByUserId(userId);
+    }
+
+    @Override
+    public void deleteFromCart(Long cartId, Long userId) throws CartNotFoundException, UserNotFoundException, NotTheUserException {
+        Cart cart;
+        CardStock cardStock;
+        Optional<User> userAux = userDao.findById(userId);
+        Optional<Cart> cartAux = cartDao.findById(cartId);
+        int quantityAux;
+        int cartQuantityAux;
+        
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        if(cartAux.isEmpty()){
+            throw new CartNotFoundException();
+        }
+        if (cartAux.get().getUser() != userAux.get()) {
+            throw new NotTheUserException();
+        }
+        
+        cart = cartAux.get();
+        cardStock = cart.getCardStock();
+
+        quantityAux = cart.getQuantity();
+        
+        cardStock.setQuantity(cardStock.getQuantity() + quantityAux);
+        cardStock.setCartQuantity(cardStock.getCartQuantity() - quantityAux);
+        
+        cartDao.delete(cart);
     }
 
 }
