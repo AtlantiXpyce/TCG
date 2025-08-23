@@ -21,6 +21,11 @@ function Header() {
     navigate("/cart");
   }
 
+  const goOrders = () => {
+    navigate("/ordersBuyer");
+  }
+
+
   return (
     <header className="bg-light p-3">
       <div className="container d-flex justify-content-between align-items-center">
@@ -43,6 +48,11 @@ function Header() {
           {username && (
             <button className="btn btn-outline-primary btn-sm" onClick={goCart}>
               Cart
+            </button>
+          )}
+          {username && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goOrders}>
+              Orders
             </button>
           )}
           <button className="btn btn-outline-primary btn-sm" onClick={goBack}>

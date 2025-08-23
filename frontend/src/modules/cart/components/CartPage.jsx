@@ -116,6 +116,7 @@ const CartPage = () => {
                     <th>Cantidad</th>
                     <th>Precio</th>
                     <th>Vendedor</th>
+                    <th>Subtotal</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -134,6 +135,7 @@ const CartPage = () => {
                             {item.sellerName}
                         </Link>
                       </td>
+                      <td>${(item.price * item.quantity).toFixed(2)}</td>
                       <td>
                         <button
                           className="btn btn-sm btn-danger"

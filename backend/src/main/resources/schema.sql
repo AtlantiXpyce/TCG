@@ -171,7 +171,7 @@ INSERT INTO card (name, tcgid, setid, rarityid, cardNumber, artVariant, imagen) 
 ('Pidgeot', 1, 2, 3, '8', 'Base', null),
 ('Black lotus', 2, 3, 6, '50', 'Base', null),
 ('Ancestral Recall', 2, 3, 6, '23', 'Base', null),
-('Cursed Land', 2, 2, 5, '84', 'Base', null),
+('Cursed Land', 2, 3, 5, '84', 'Base', null),
 ('The Aetherspark', 2, 4, 7, '231', 'Base', null),
 ('Chandra, Spark Hunter', 2, 4, 7, '411', 'Fracture Foil', null),
 ('Chandra, Spark Hunter ', 2, 4, 7, '401', 'Foil', null);

@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService{
             throw new UserNotFoundException();
         }
         
-        return orderTableDao.findByBuyerId(buyerId);
+        return orderTableDao.findByBuyerIdOrderByIdDesc(buyerId);
     }
 
     @Override
