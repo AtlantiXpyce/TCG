@@ -16,6 +16,10 @@ function Header() {
   const goBack = () => {
     navigate("/");
   }
+  
+  const goCart = () => {
+    navigate("/cart");
+  }
 
   return (
     <header className="bg-light p-3">
@@ -35,9 +39,16 @@ function Header() {
             Iniciar sesión
           </Link>
         )}
-        <button className="btn btn-outline-primary btn-sm" onClick={goBack}>
-          Home
-        </button>
+        <div className="d-flex gap-2 ms-auto">
+          {username && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goCart}>
+              Cart
+            </button>
+          )}
+          <button className="btn btn-outline-primary btn-sm" onClick={goBack}>
+            Home
+          </button>
+        </div>
       </div>
     </header>
   );

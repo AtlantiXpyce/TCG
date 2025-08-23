@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -10,6 +10,7 @@ import UserProfile from './modules/user/components/Profile';
 import CardDetails from "./modules/cards/components/CardDetails";
 import CardSearch from './modules/cards/components/CardSearch';
 import AddCardStock from "./modules/cardStock/components/AddCardStock.jsx";
+import CartPage from "./modules/cart/components/CartPage.jsx";
 
 
 const Content = () => {
@@ -28,6 +29,7 @@ const Content = () => {
         <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/cards/:id" element={<CardDetails />} />
         <Route path="/sell/:cardId" element={<AddCardStock />} />
+        <Route path="/cart" element={<CartPage />} />        
       </Routes>
     </main>
   );
