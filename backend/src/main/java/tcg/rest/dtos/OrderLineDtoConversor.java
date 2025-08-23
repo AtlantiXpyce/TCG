@@ -20,7 +20,9 @@ public class OrderLineDtoConversor {
                 orderLine.getQuantity(),
                 orderLine.getCondition(),
                 orderLine.getSeller().getId(),
-                orderLine.getSeller().getUsername()
+                orderLine.getSeller().getUsername(),
+                orderLine.getCard().getSet().getName(),
+                orderLine.getCard().getTcg().getName()
         );
     }
 

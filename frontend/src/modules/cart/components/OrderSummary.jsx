@@ -24,6 +24,8 @@ const OrderSummaryPage = () => {
                 <thead>
                   <tr>
                     <th>Nombre</th>
+                    <th>TCG</th>
+                    <th>Set</th>
                     <th>Idioma</th>
                     <th>Condición</th>
                     <th>Cantidad</th>
@@ -39,6 +41,8 @@ const OrderSummaryPage = () => {
                             {item.card}
                         </Link>
                       </td>
+                      <td>{item.tcgName}</td>
+                      <td>{item.cardSetName}</td>
                       <td>{item.language}</td>
                       <td>{item.condition}</td>
                       <td>{item.quantity}</td>

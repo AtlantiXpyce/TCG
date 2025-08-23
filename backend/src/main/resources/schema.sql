@@ -106,7 +106,9 @@ CREATE TABLE orderTable (
     orderDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     rating INT,
     review VARCHAR(100),
-    arrivalDate TIMESTAMP
+    arrivalDate TIMESTAMP,
+    buyerid INT NOT NULL,
+    FOREIGN KEY (buyerid) REFERENCES users(id)
 );
 
 CREATE TABLE orderLine (

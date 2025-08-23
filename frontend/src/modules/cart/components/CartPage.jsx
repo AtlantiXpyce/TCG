@@ -109,8 +109,8 @@ const CartPage = () => {
                 <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Set</th>
                     <th>TCG</th>
+                    <th>Set</th>
                     <th>Idioma</th>
                     <th>Condición</th>
                     <th>Cantidad</th>
@@ -123,8 +123,8 @@ const CartPage = () => {
                   {cart.map((item) => (
                     <tr key={item.cartId}>
                       <td>{item.cardName}</td>
-                      <td>{item.cardSetName}</td>
                       <td>{item.tcgName}</td>
+                      <td>{item.cardSetName}</td>
                       <td>{item.language}</td>
                       <td>{item.condition}</td>
                       <td>{item.quantity}</td>

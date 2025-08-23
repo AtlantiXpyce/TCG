@@ -1,8 +1,14 @@
 package tcg.model.entities;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import static jakarta.persistence.FetchType.LAZY;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class OrderTable {
@@ -12,11 +18,13 @@ public class OrderTable {
     private Integer rating;
     private String review;
     private LocalDateTime arrivalDate;
+    private User buyer;
 
     public OrderTable() {}
 
-    public OrderTable(LocalDateTime orderDate) {
+    public OrderTable(LocalDateTime orderDate, User buyer) {
         this.orderDate = orderDate;
+        this.buyer = buyer;
     }
 
     @Id
@@ -59,5 +67,15 @@ public class OrderTable {
 
     public void setArrivalDate(LocalDateTime arrivalDate) {
         this.arrivalDate = arrivalDate;
+    }
+    
+    @ManyToOne(optional = false, fetch = LAZY)
+    @JoinColumn(name = "buyerid")
+    public User getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(User buyer) {
+        this.buyer = buyer;
     }
 }

@@ -8,19 +8,21 @@ public class OrderLineDto {
     private Long orderId;
     private String card;
     private Long cardId;
+    private String cardSetName;
     private String language;
     private BigDecimal price;
     private int quantity;
     private String condition;
     private Long sellerId;
     private String sellerName;
+    private String tcgName;
 
     
     public OrderLineDto() {
     }
     
     public OrderLineDto(Long id, Long orderId, String card, Long cardId, String language, BigDecimal price,
-            int quantity, String condition, Long sellerId, String sellerName) {
+            int quantity, String condition, Long sellerId, String sellerName, String cardSetName, String tcgName) {
         this.id = id;
         this.orderId = orderId;
         this.card = card;
@@ -31,6 +33,8 @@ public class OrderLineDto {
         this.condition = condition;
         this.sellerId = sellerId;
         this.sellerName = sellerName;
+        this.cardSetName = cardSetName;
+        this.tcgName = tcgName;
     }
 
     public Long getId() {
@@ -125,5 +129,21 @@ public class OrderLineDto {
 
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName;
+    }
+
+    public String getCardSetName() {
+        return cardSetName;
+    }
+
+    public void setCardSetName(String cardSetName) {
+        this.cardSetName = cardSetName;
+    }
+
+    public String getTcgName() {
+        return tcgName;
+    }
+
+    public void setTcgName(String tcgName) {
+        this.tcgName = tcgName;
     }
 }

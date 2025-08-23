@@ -141,7 +141,7 @@ public class CartServiceImpl implements CartService{
             throw new EmptyCartException();
         }
         
-        orderTable = new OrderTable(LocalDateTime.now());
+        orderTable = new OrderTable(LocalDateTime.now(), userAux.get());
         
         orderTableDao.save(orderTable);
 
