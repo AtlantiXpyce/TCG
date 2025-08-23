@@ -4,7 +4,9 @@ import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,36 +129,46 @@ public class CartServiceImpl implements CartService{
     @Override
     public List<OrderLine> buyCart(Long userId) throws UserNotFoundException, EmptyCartException{
         Optional<User> userAux = userDao.findById(userId);
-        OrderTable orderTable;
-        OrderLine orderLine;
-        List<OrderLine> orderLines = new ArrayList<>();
-
         if(userAux.isEmpty()){
             throw new UserNotFoundException();
         }
         
         List<Cart> cartList = cartDao.findByUserId(userId);
-
         if(cartList.isEmpty()){
             throw new EmptyCartException();
         }
         
-        orderTable = new OrderTable(LocalDateTime.now(), userAux.get());
-        
-        orderTableDao.save(orderTable);
+        List<OrderLine> orderLines = new ArrayList<>();
 
-        for (Cart cart : cartList) {
-            orderLine = new OrderLine(orderTable, cart.getCardStock().getCard(), cart.getCardStock().getLang().getName(), 
-            cart.getCardStock().getPrice(), cart.getQuantity(), cart.getCardStock().getCondition().getName(),cart.getCardStock().getSeller());
-            
-            cart.getCardStock().setCartQuantity(cart.getCardStock().getCartQuantity() - cart.getQuantity());
+        Map<User, List<Cart>> cartsBySeller = cartList.stream()
+            .collect(Collectors.groupingBy(cart -> cart.getCardStock().getSeller()));
 
-            orderLineDao.save(orderLine);
-            cartDao.delete(cart);
+        for (Map.Entry<User, List<Cart>> entry : cartsBySeller.entrySet()) {
+            User seller = entry.getKey();
+            List<Cart> sellerCarts = entry.getValue();
 
-            orderLines.add(orderLine);
+            OrderTable orderTable = new OrderTable(LocalDateTime.now(), userAux.get());
+            orderTableDao.save(orderTable);
+
+            for (Cart cart : sellerCarts) {
+                OrderLine orderLine = new OrderLine(
+                        orderTable,
+                        cart.getCardStock().getCard(),
+                        cart.getCardStock().getLang().getName(),
+                        cart.getCardStock().getPrice(),
+                        cart.getQuantity(),
+                        cart.getCardStock().getCondition().getName(),
+                        seller
+                );
+
+                cart.getCardStock().setCartQuantity(cart.getCardStock().getCartQuantity() - cart.getQuantity());
+
+                orderLineDao.save(orderLine);
+                cartDao.delete(cart);
+
+                orderLines.add(orderLine);
+            }
         }
         return orderLines;
     }
-
 }
