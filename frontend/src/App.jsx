@@ -12,6 +12,7 @@ import CardSearch from './modules/cards/components/CardSearch';
 import AddCardStock from "./modules/cardStock/components/AddCardStock.jsx";
 import CartPage from "./modules/cart/components/CartPage.jsx";
 import OrderSummaryPage from "./modules/cart/components/OrderSummary.jsx";
+import OrdersBuyer from "./modules/orders/components/OrdersBuyer.jsx";
 
 
 const Content = () => {
@@ -32,6 +33,7 @@ const Content = () => {
         <Route path="/sell/:cardId" element={<AddCardStock />} />
         <Route path="/cart" element={<CartPage />} />      
         <Route path="/orderSummary" element={<OrderSummaryPage />} />      
+        <Route path="/ordersBuyer" element={<OrdersBuyer />} />      
       </Routes>
     </main>
   );
