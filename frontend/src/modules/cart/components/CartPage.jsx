@@ -68,7 +68,10 @@ const CartPage = () => {
       }
 
       alert("Compra efectuada correctamente");
+      const orderLinesDto = await response.json();
       setCart([]);
+      navigate("/orderSummary", { state: { orderLines: orderLinesDto } });
+
     } catch (err) {
       console.error("Error en la compra", err);
     }

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tcg.model.entities.Cart;
+import tcg.model.entities.OrderLine;
 import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.CartNotFoundException;
 import tcg.model.exceptions.EmptyCartException;
@@ -27,6 +27,8 @@ import tcg.rest.common.JwtGenerator;
 import tcg.rest.dtos.CartDto;
 import tcg.rest.dtos.CartLineDto;
 import tcg.rest.dtos.CartLineDtoConversor;
+import tcg.rest.dtos.OrderLineDto;
+import tcg.rest.dtos.OrderLineDtoConversor;
 
 
 @RestController
@@ -101,12 +103,11 @@ public class CartController {
     }
     
     @PostMapping("/buy")
-    public String buyCart(HttpServletRequest request) throws UserNotFoundException, EmptyCartException{
+    public List<OrderLineDto> buyCart(HttpServletRequest request) throws UserNotFoundException, EmptyCartException{
         String token = request.getHeader("Authorization").substring(7);
         Long authId = jwtGenerator.getIdFromToken(token);
-        
-        cartService.buyCart(authId);
+        List<OrderLine> orderLines = cartService.buyCart(authId);
 
-        return "Compra efectuada correctamente";
+        return OrderLineDtoConversor.toOrderLineDtos(orderLines);
     }
 }

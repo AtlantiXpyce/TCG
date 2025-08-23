@@ -117,6 +117,8 @@ CREATE TABLE orderLine (
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
+    sellerid INT NOT NULL,
+    FOREIGN KEY (sellerid) REFERENCES users(id),
     FOREIGN KEY (orderid) REFERENCES orderTable(id),
     FOREIGN KEY (cardid) REFERENCES card(id)
 );

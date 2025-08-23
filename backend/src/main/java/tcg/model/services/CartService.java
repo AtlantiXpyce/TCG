@@ -4,7 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 import tcg.model.entities.Cart;
-import tcg.model.entities.OrderTable;
+import tcg.model.entities.OrderLine;
 import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.CartNotFoundException;
 import tcg.model.exceptions.EmptyCartException;
@@ -19,5 +19,5 @@ public interface CartService {
 
     public void deleteFromCart(Long cartId, Long userId) throws CartNotFoundException, UserNotFoundException, NotTheUserException;
 
-    public void buyCart (Long userId) throws UserNotFoundException, EmptyCartException;
+    public List<OrderLine> buyCart (Long userId) throws UserNotFoundException, EmptyCartException;
 }

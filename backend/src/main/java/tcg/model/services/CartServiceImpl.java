@@ -2,6 +2,7 @@ package tcg.model.services;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,10 +125,11 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public void buyCart(Long userId) throws UserNotFoundException, EmptyCartException{
+    public List<OrderLine> buyCart(Long userId) throws UserNotFoundException, EmptyCartException{
         Optional<User> userAux = userDao.findById(userId);
         OrderTable orderTable;
         OrderLine orderLine;
+        List<OrderLine> orderLines = new ArrayList<>();
 
         if(userAux.isEmpty()){
             throw new UserNotFoundException();
@@ -145,13 +147,16 @@ public class CartServiceImpl implements CartService{
 
         for (Cart cart : cartList) {
             orderLine = new OrderLine(orderTable, cart.getCardStock().getCard(), cart.getCardStock().getLang().getName(), 
-            cart.getCardStock().getPrice(), cart.getQuantity(), cart.getCardStock().getCondition().getName());
+            cart.getCardStock().getPrice(), cart.getQuantity(), cart.getCardStock().getCondition().getName(),cart.getCardStock().getSeller());
             
             cart.getCardStock().setCartQuantity(cart.getCardStock().getCartQuantity() - cart.getQuantity());
 
             orderLineDao.save(orderLine);
             cartDao.delete(cart);
+
+            orderLines.add(orderLine);
         }
+        return orderLines;
     }
 
 }
