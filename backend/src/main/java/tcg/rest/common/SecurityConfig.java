@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/cart").authenticated()
                 .requestMatchers(HttpMethod.GET, "/cart").authenticated()
                 .requestMatchers(HttpMethod.POST, "/cart/delete").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cart/buy").authenticated()
                 .anyRequest().denyAll()
             );
 

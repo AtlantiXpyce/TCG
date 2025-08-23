@@ -1,8 +1,14 @@
 package tcg.model.entities;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class OrderLine {
@@ -16,6 +22,15 @@ public class OrderLine {
     private String condition;
 
     public OrderLine() {}
+
+    public OrderLine(OrderTable order, Card card, String language, BigDecimal price, int quantity, String condition) {
+        this.order = order;
+        this.card = card;
+        this.language = language;
+        this.price = price;
+        this.quantity = quantity;
+        this.condition = condition;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

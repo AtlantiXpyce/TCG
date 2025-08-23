@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import tcg.model.entities.Cart;
 import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.CartNotFoundException;
+import tcg.model.exceptions.EmptyCartException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.QuantityExceededException;
 import tcg.model.exceptions.UserNotFoundException;
@@ -63,6 +64,11 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(EmptyCartException.class)
+    public ResponseEntity<String> handleEmptyCartException(EmptyCartException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @ExceptionHandler(NotTheUserException.class)
     public ResponseEntity<String> handleNotTheUserException(NotTheUserException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
@@ -95,7 +101,12 @@ public class CartController {
     }
     
     @PostMapping("/buy")
-    public EntityResponse<?> buyCart(HttpServletRequest request){
-        return null;
+    public String buyCart(HttpServletRequest request) throws UserNotFoundException, EmptyCartException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+        
+        cartService.buyCart(authId);
+
+        return "Compra efectuada correctamente";
     }
 }

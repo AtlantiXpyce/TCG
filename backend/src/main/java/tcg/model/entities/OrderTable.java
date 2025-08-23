@@ -15,6 +15,10 @@ public class OrderTable {
 
     public OrderTable() {}
 
+    public OrderTable(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {

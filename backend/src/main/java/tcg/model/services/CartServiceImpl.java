@@ -1,6 +1,7 @@
 package tcg.model.services;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,10 +13,15 @@ import tcg.model.entities.CardStock;
 import tcg.model.entities.CardStockDao;
 import tcg.model.entities.Cart;
 import tcg.model.entities.CartDao;
+import tcg.model.entities.OrderLine;
+import tcg.model.entities.OrderLineDao;
+import tcg.model.entities.OrderTable;
+import tcg.model.entities.OrderTableDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.CartNotFoundException;
+import tcg.model.exceptions.EmptyCartException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.QuantityExceededException;
 import tcg.model.exceptions.UserNotFoundException;
@@ -32,6 +38,13 @@ public class CartServiceImpl implements CartService{
     
     @Autowired
     private UserDao userDao;
+    
+    @Autowired
+    private OrderTableDao orderTableDao;
+        
+    @Autowired
+    private OrderLineDao orderLineDao;
+    
 
     @Override
     public Cart addToCart(Long cardStockId, int quantity, Long userId) throws CardStockNotFoundException, UserNotFoundException, QuantityExceededException, InvalidParameterException{
@@ -88,7 +101,6 @@ public class CartServiceImpl implements CartService{
         Optional<User> userAux = userDao.findById(userId);
         Optional<Cart> cartAux = cartDao.findById(cartId);
         int quantityAux;
-        int cartQuantityAux;
         
         if(userAux.isEmpty()){
             throw new UserNotFoundException();
@@ -109,6 +121,37 @@ public class CartServiceImpl implements CartService{
         cardStock.setCartQuantity(cardStock.getCartQuantity() - quantityAux);
         
         cartDao.delete(cart);
+    }
+
+    @Override
+    public void buyCart(Long userId) throws UserNotFoundException, EmptyCartException{
+        Optional<User> userAux = userDao.findById(userId);
+        OrderTable orderTable;
+        OrderLine orderLine;
+
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        
+        List<Cart> cartList = cartDao.findByUserId(userId);
+
+        if(cartList.isEmpty()){
+            throw new EmptyCartException();
+        }
+        
+        orderTable = new OrderTable(LocalDateTime.now());
+        
+        orderTableDao.save(orderTable);
+
+        for (Cart cart : cartList) {
+            orderLine = new OrderLine(orderTable, cart.getCardStock().getCard(), cart.getCardStock().getLang().getName(), 
+            cart.getCardStock().getPrice(), cart.getQuantity(), cart.getCardStock().getCondition().getName());
+            
+            cart.getCardStock().setCartQuantity(cart.getCardStock().getCartQuantity() - cart.getQuantity());
+
+            orderLineDao.save(orderLine);
+            cartDao.delete(cart);
+        }
     }
 
 }
