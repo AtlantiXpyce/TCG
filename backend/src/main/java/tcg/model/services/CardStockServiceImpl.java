@@ -19,6 +19,8 @@ import tcg.model.entities.ConditionDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.CardNotFoundException;
+import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 
 @Service
@@ -66,5 +68,18 @@ public class CardStockServiceImpl implements CardStockService{
         userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
         
         return cardStockDao.findByUserId(sellerId, pageable);
+    }
+
+    @Override
+    public void deleteStock(Long stockId, Long sellerId) throws UserNotFoundException, CardStockNotFoundException, NotTheUserException {
+        userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
+        CardStock stock = cardStockDao.findById(stockId).orElseThrow(CardStockNotFoundException::new);
+        
+        if(sellerId != stock.getSeller().getId()){
+            throw new NotTheUserException();
+        }
+
+        cardStockDao.delete(stock);
+        
     }
 }

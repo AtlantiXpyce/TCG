@@ -97,7 +97,7 @@ CREATE TABLE cart (
     cardStockid INT NOT NULL,
     quantity INT NOT NULL,
     userid INT NOT NULL,
-    FOREIGN KEY (cardStockid) REFERENCES cardStock(id),
+    FOREIGN KEY (cardStockid) REFERENCES cardStock(id) ON DELETE CASCADE,
     FOREIGN KEY (userid) REFERENCES users(id)
 );
 

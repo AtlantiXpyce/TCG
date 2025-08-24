@@ -21,6 +21,7 @@ import tcg.model.entities.CardLanguage;
 import tcg.model.entities.CardStock;
 import tcg.model.entities.Condition;
 import tcg.model.exceptions.CardNotFoundException;
+import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 import tcg.model.services.CardLanguageService;
@@ -103,6 +104,16 @@ public class CardStockController {
         }
         
         return CardStockConversor.toCardStockDtos(cardStockService.getSellerStocks(sellerId, pageable));
+    }
+
+    @PostMapping("/delete")
+    public void deleteStock(@RequestParam(required = true) Long sellerId, @RequestParam(required = true) Long stockId, HttpServletRequest request) throws NotTheUserException, UserNotFoundException, CardStockNotFoundException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+        if(authId != sellerId){
+            throw new NotTheUserException();
+        }
+        cardStockService.deleteStock(stockId, sellerId);
     }
 
     public Pageable createPageable(Integer page) {
