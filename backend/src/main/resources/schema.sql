@@ -88,8 +88,8 @@ CREATE TABLE cardStock (
     lang INT NOT NULL,
     FOREIGN KEY (conditionid) REFERENCES condition(id),
     FOREIGN KEY (lang) REFERENCES cardLanguage(id),
-    FOREIGN KEY (cardid) REFERENCES card(id),
-    FOREIGN KEY (sellerid) REFERENCES users(id)
+    FOREIGN KEY (cardid) REFERENCES card(id) ON DELETE CASCADE,
+    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart (
@@ -98,7 +98,7 @@ CREATE TABLE cart (
     quantity INT NOT NULL,
     userid INT NOT NULL,
     FOREIGN KEY (cardStockid) REFERENCES cardStock(id) ON DELETE CASCADE,
-    FOREIGN KEY (userid) REFERENCES users(id)
+    FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderTable (
@@ -108,7 +108,7 @@ CREATE TABLE orderTable (
     review VARCHAR(100),
     arrivalDate TIMESTAMP,
     buyerid INT NOT NULL,
-    FOREIGN KEY (buyerid) REFERENCES users(id)
+    FOREIGN KEY (buyerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderLine (
@@ -120,9 +120,9 @@ CREATE TABLE orderLine (
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
     sellerid INT NOT NULL,
-    FOREIGN KEY (sellerid) REFERENCES users(id),
-    FOREIGN KEY (orderid) REFERENCES orderTable(id),
-    FOREIGN KEY (cardid) REFERENCES card(id)
+    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (orderid) REFERENCES orderTable(id) ON DELETE CASCADE,
+    FOREIGN KEY (cardid) REFERENCES card(id) ON DELETE CASCADE
 );
 
 INSERT INTO condition (name, initial) VALUES

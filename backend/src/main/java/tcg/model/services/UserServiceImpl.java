@@ -14,6 +14,7 @@ import tcg.model.entities.UserDao;
 import tcg.model.exceptions.AlreadyExistsException;
 import tcg.model.exceptions.AlreadyStoreException;
 import tcg.model.exceptions.IncorrectParamsException;
+import tcg.model.exceptions.NotAnAdminException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 
@@ -98,5 +99,17 @@ public class UserServiceImpl implements UserService{
         user.setStore(true);
 
         userDao.save(user);
+    }
+
+    @Override
+    public void deleteUser(Long adminId, Long userId) throws UserNotFoundException, NotAnAdminException {
+        Optional<User> userAux = userDao.findById(userId);
+        Optional<User> adminAux = userDao.findById(adminId);
+        
+        if(userAux.isEmpty()){ throw new UserNotFoundException(); }
+        if(adminAux.isEmpty()){ throw new UserNotFoundException(); }
+        if(!adminAux.get().getRole().equals("ADMIN")){ throw new NotAnAdminException(); }
+        if(userAux.get().getRole().equals("ADMIN")){ throw new NotAnAdminException(); }
+        userDao.delete(userAux.get());
     }
 }

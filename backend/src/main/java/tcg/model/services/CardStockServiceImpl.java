@@ -20,6 +20,7 @@ import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.CardNotFoundException;
 import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.NotAnAdminException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 
@@ -72,11 +73,13 @@ public class CardStockServiceImpl implements CardStockService{
 
     @Override
     public void deleteStock(Long stockId, Long sellerId) throws UserNotFoundException, CardStockNotFoundException, NotTheUserException {
-        userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
+        User seller = userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
         CardStock stock = cardStockDao.findById(stockId).orElseThrow(CardStockNotFoundException::new);
         
-        if(sellerId != stock.getSeller().getId()){
-            throw new NotTheUserException();
+        if (!sellerId.equals(stock.getSeller().getId())) {
+            if (!seller.getRole().equals("ADMIN")) {
+                throw new NotTheUserException();
+            }
         }
 
         cardStockDao.delete(stock);

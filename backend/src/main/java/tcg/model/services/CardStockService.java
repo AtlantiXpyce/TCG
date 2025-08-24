@@ -10,6 +10,8 @@ import tcg.model.exceptions.CardNotFoundException;
 import tcg.model.exceptions.CardStockNotFoundException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
+import tcg.model.exceptions.NotAnAdminException;
+
 
 public interface CardStockService {
     public CardStock getById(Long id) throws CardNotFoundException;

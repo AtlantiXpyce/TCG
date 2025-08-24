@@ -21,6 +21,8 @@ public class SecurityConfig {
 
     private final JwtGenerator jwtGenerator;
 
+    private String admin = "ADMIN";
+
     public SecurityConfig(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;
     }
@@ -50,6 +52,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/orders").authenticated()
                 .requestMatchers(HttpMethod.GET, "/orders/lines").authenticated()
                 .requestMatchers(HttpMethod.POST, "/orders/review").authenticated()
+                .requestMatchers(HttpMethod.POST, "/admin/deleteCard").hasRole(admin)
+                .requestMatchers(HttpMethod.POST, "/admin/deleteStock").hasRole(admin)
+                .requestMatchers(HttpMethod.POST, "/admin/deleteUser").hasRole(admin)
                 .anyRequest().denyAll()
             );
 

@@ -58,6 +58,11 @@ public class CardStockController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
     
+    @ExceptionHandler(CardStockNotFoundException.class)
+    public ResponseEntity<String> handleCardStockNotFoundException(CardStockNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(NotTheUserException.class)
     public ResponseEntity<String> handleNotTheUserException(NotTheUserException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
