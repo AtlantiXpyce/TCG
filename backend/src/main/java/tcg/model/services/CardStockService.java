@@ -15,4 +15,6 @@ public interface CardStockService {
     public Page<CardStock> findStock(Long id, String language, Pageable pageable);
 
     public CardStock createStock(Long cardId, Long sellerId, Long languageId, BigDecimal price, int quantity, Long conditionId, String comment) throws CardNotFoundException, UserNotFoundException;
+
+    public Page<CardStock> getSellerStocks(Long sellerId, Pageable pageable) throws UserNotFoundException;
 }

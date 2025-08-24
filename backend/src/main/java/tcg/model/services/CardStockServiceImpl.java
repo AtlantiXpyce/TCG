@@ -60,4 +60,11 @@ public class CardStockServiceImpl implements CardStockService{
         CardStock stock = new CardStock(card, seller, price, quantity, condition, comment, lang);
         return cardStockDao.save(stock);
     }
+
+    @Override
+    public Page<CardStock> getSellerStocks(Long sellerId, Pageable pageable) throws UserNotFoundException{
+        userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
+        
+        return cardStockDao.findByUserId(sellerId, pageable);
+    }
 }

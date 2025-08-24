@@ -199,11 +199,11 @@ INSERT INTO cardStock (cardid, sellerid, price, quantity, conditionid, comment, 
 (14, (1), 7.00, 4, 1, 'Rara de conseguir', 3, 0),
 (14, (1), 3.80, 6, 2, 'Buena calidad general', 1, 0),
 (14, (1), 1.50, 20, 5, 'Estado malo', 2, 0),
-(14, (2), 5.20, 9, 1, 'Perfecta en español', 1, 0),
-(14, (2), 4.80, 7, 2, 'Buena, poco uso', 1, 0),
-(14, (2), 3.10, 10, 3, 'Bastante jugada', 2, 0),
-(14, (2), 6.50, 3, 1, 'Inglés casi perfecta', 2, 0),
-(14, (2), 2.80, 11, 4, 'Muy usada', 3, 0),
-(14, (2), 7.20, 2, 1, 'Edición difícil', 3, 0),
-(14, (2), 3.60, 5, 2, 'Estado decente', 1, 0);
+(14, (3), 5.20, 9, 1, 'Perfecta en español', 1, 0),
+(14, (3), 4.80, 7, 2, 'Buena, poco uso', 1, 0),
+(14, (3), 3.10, 10, 3, 'Bastante jugada', 2, 0),
+(14, (3), 6.50, 3, 1, 'Inglés casi perfecta', 2, 0),
+(14, (3), 2.80, 11, 4, 'Muy usada', 3, 0),
+(14, (3), 7.20, 2, 1, 'Edición difícil', 3, 0),
+(14, (3), 3.60, 5, 2, 'Estado decente', 1, 0);
 

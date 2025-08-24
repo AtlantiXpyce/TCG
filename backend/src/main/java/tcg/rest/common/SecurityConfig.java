@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/cardStock/languages").permitAll()
                 .requestMatchers(HttpMethod.GET, "/cardStock/conditions").permitAll()
                 .requestMatchers(HttpMethod.GET, "/cardStock/find").authenticated()
+                .requestMatchers(HttpMethod.GET, "/cardStock/seller").authenticated()
                 .requestMatchers(HttpMethod.POST, "/cart").authenticated()
                 .requestMatchers(HttpMethod.GET, "/cart").authenticated()
                 .requestMatchers(HttpMethod.POST, "/cart/delete").authenticated()
