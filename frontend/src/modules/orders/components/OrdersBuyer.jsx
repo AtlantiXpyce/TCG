@@ -80,7 +80,7 @@ const OrdersBuyer = () => {
                 {orders.map((order) => (
                   <tr key={order.id}>
                     <td>
-                        <Link to={`/order/${order.id}`} className="text-decoration-none">
+                        <Link to={`/order/${order.id}`} state={{rating: order.rating, review: order.review}} className="text-decoration-none">
                             {order.id}
                         </Link>
                     </td>

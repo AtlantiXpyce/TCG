@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
+import ReviewForm from "./ReviewForm";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { rating, review } = location.state || {};
   const [orderLines, setOrderLines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -82,17 +85,17 @@ const OrderDetails = () => {
             {orderLines.map((line) => (
               <tr key={line.id}>
                 <td>
-                    <Link to={`/cards/${line.cardId}`} className="text-decoration-none">
-                        {line.card}
-                    </Link>
+                  <Link to={`/cards/${line.cardId}`} className="text-decoration-none">
+                    {line.card}
+                  </Link>
                 </td>
                 <td>{line.cardSetName}</td>
                 <td>{line.language}</td>
                 <td>{line.condition}</td>
                 <td>
-                    <Link to={`/profile/${line.sellerId}`} className="text-decoration-none">
-                        {line.sellerName}
-                    </Link>
+                  <Link to={`/profile/${line.sellerId}`} className="text-decoration-none">
+                    {line.sellerName}
+                  </Link>
                 </td>
                 <td>{line.quantity}</td>
                 <td>${line.price}</td>
@@ -110,11 +113,16 @@ const OrderDetails = () => {
           </tfoot>
         </table>
       </div>
-
-      <button
-        className="btn btn-secondary mt-3"
-        onClick={() => navigate(-1)}
-      >
+      {rating !== null ? (
+        <div className="card p-4 mt-4 shadow-sm">
+          <h4 className="mb-3 text-center">Tu valoración</h4>
+          <p><strong>Puntuación:</strong> {rating} / 5</p>
+          <p><strong>Comentario:</strong> {review || "Sin comentario"}</p>
+        </div>
+      ) : (
+        <ReviewForm orderTableId={id} buyerId={localStorage.getItem("userId")} />
+      )}
+      <button className="btn btn-secondary mt-3" onClick={() => navigate(-1)}>
         Volver
       </button>
     </div>
