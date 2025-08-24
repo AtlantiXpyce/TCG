@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/admin/deleteCard").hasRole(admin)
                 .requestMatchers(HttpMethod.POST, "/admin/deleteStock").hasRole(admin)
                 .requestMatchers(HttpMethod.POST, "/admin/deleteUser").hasRole(admin)
+                .requestMatchers(HttpMethod.GET, "/admin/getUsers").hasRole(admin)
                 .anyRequest().denyAll()
             );
 

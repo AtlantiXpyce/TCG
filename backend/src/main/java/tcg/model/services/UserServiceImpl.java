@@ -3,6 +3,8 @@ package tcg.model.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,5 +113,15 @@ public class UserServiceImpl implements UserService{
         if(!adminAux.get().getRole().equals("ADMIN")){ throw new NotAnAdminException(); }
         if(userAux.get().getRole().equals("ADMIN")){ throw new NotAnAdminException(); }
         userDao.delete(userAux.get());
+    }
+
+    @Override
+    public Page<User> getUsers(Long adminId, Pageable page) throws NotAnAdminException, UserNotFoundException {
+        Optional<User> adminAux = userDao.findById(adminId);
+
+        if(adminAux.isEmpty()){ throw new UserNotFoundException();}
+        if(!adminAux.get().getRole().equals("ADMIN")){ throw new NotAnAdminException(); }
+
+        return userDao.findByRole("USER", page);
     }
 }
