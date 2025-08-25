@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const username = localStorage.getItem("username");
+  const isStore = localStorage.getItem("isStore");
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
@@ -10,6 +11,7 @@ function Header() {
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     localStorage.removeItem("userId");
+    localStorage.removeItem("isStore");
     navigate("/login");
   };
 
@@ -25,6 +27,9 @@ function Header() {
     navigate("/ordersBuyer");
   }
 
+  const goStock = () => {
+    navigate("/myStock");
+  }
 
   return (
     <header className="bg-light p-3">
@@ -45,14 +50,19 @@ function Header() {
           </Link>
         )}
         <div className="d-flex gap-2 ms-auto">
+          {isStore && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goStock}>
+              Mis ofertas
+            </button>
+          )}
           {username && (
             <button className="btn btn-outline-primary btn-sm" onClick={goCart}>
-              Cart
+              Carrito
             </button>
           )}
           {username && (
             <button className="btn btn-outline-primary btn-sm" onClick={goOrders}>
-              Orders
+              Mis pedidos
             </button>
           )}
           <button className="btn btn-outline-primary btn-sm" onClick={goBack}>

@@ -14,6 +14,7 @@ import CartPage from "./modules/cart/components/CartPage.jsx";
 import OrderSummaryPage from "./modules/cart/components/OrderSummary.jsx";
 import OrdersBuyer from "./modules/orders/components/OrdersBuyer.jsx";
 import OrderDetails from "./modules/orders/components/OrderDetails.jsx";
+import MyStock from "./modules/cardStock/components/MyStock.jsx";
 
 
 const Content = () => {
@@ -36,6 +37,7 @@ const Content = () => {
         <Route path="/orderSummary" element={<OrderSummaryPage />} />      
         <Route path="/ordersBuyer" element={<OrdersBuyer />} />
         <Route path="/order/:id" element={<OrderDetails />} />
+        <Route path="/mystock" element={<MyStock />} />
       </Routes>
     </main>
   );

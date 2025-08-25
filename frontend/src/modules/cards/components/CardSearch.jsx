@@ -10,12 +10,9 @@ const CardSearch = () => {
   const [cards, setCards] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [isStore, setIsStore] = useState(false);
+  const isStore = localStorage.getItem("isStore");
 
   useEffect(() => {
-
-    const storedIsStore = localStorage.getItem("isStore");
-    setIsStore(storedIsStore === "true");
 
     fetch("http://localhost:8080/cards/tcgs")
       .then(res => res.json())
