@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws UserNotFoundException {
         User user = userService.login(request.getUsername(), request.getPassword());
         String token = jwtGenerator.generateToken(user);
-        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole(), user.getId()));
+        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole(), user.getId(),user.isStore()));
     }
 
     @GetMapping("/{id}")

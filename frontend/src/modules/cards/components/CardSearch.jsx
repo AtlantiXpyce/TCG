@@ -10,7 +10,7 @@ const CardSearch = () => {
   const [cards, setCards] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const isStore = localStorage.getItem("isStore");
+  const isStore = localStorage.getItem("isStore") === "true";
 
   useEffect(() => {
 
@@ -108,7 +108,7 @@ const CardSearch = () => {
                   <th>Rareza</th>
                   <th>TCG</th>
                   <th>Estilo</th>
-                  {isStore && <th>Acciones</th>}
+                  {(isStore === true) && <th>Acciones</th>}
                 </tr>
               </thead>
               <tbody>
@@ -124,7 +124,7 @@ const CardSearch = () => {
                     <td>{card.rarityName}</td>
                     <td>{card.tcgName}</td>
                     <td>{card.artVariant}</td>
-                    {isStore && (
+                    {(isStore == true) && (
                       <td>
                         <Link to={`/sell/${card.id}`} className="btn btn-sm btn-success">
                           Vender
