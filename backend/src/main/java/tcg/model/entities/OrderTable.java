@@ -19,12 +19,14 @@ public class OrderTable {
     private String review;
     private LocalDateTime arrivalDate;
     private User buyer;
+    private Boolean isSent;
 
     public OrderTable() {}
 
     public OrderTable(LocalDateTime orderDate, User buyer) {
         this.orderDate = orderDate;
         this.buyer = buyer;
+        this.isSent = false;
     }
 
     @Id
@@ -77,5 +79,13 @@ public class OrderTable {
 
     public void setBuyer(User buyer) {
         this.buyer = buyer;
+    }
+
+    public Boolean getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Boolean isSent) {
+        this.isSent = isSent;
     }
 }

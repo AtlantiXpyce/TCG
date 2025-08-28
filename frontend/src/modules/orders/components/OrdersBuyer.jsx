@@ -74,6 +74,7 @@ const OrdersBuyer = () => {
                   <th>Fecha de llegada</th>
                   <th>Valoración</th>
                   <th>Reseña</th>
+                  <th>Enviado?</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,6 +89,7 @@ const OrdersBuyer = () => {
                     <td>{order.arrivalDate ? new Date(order.arrivalDate).toLocaleDateString() : "-"}</td>
                     <td>{order.rating ?? "-"}</td>
                     <td>{order.review || "-"}</td>
+                    <td>{order.isSent ? "Sí" : "No"}</td>
                   </tr>
                 ))}
               </tbody>

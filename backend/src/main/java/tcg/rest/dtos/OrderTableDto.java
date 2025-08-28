@@ -10,17 +10,19 @@ public class OrderTableDto {
     private String review;
     private LocalDateTime arrivalDate;
     private Long buyerId;
+    private Boolean isSent;
 
     public OrderTableDto() {}
 
-    public OrderTableDto(Long id, LocalDateTime orderDate, Integer rating,
-                         String review, LocalDateTime arrivalDate, Long buyerId) {
+    public OrderTableDto(Long id, LocalDateTime orderDate, Integer rating, String review,
+                         LocalDateTime arrivalDate, Long buyerId, Boolean isSent) {
         this.id = id;
         this.orderDate = orderDate;
         this.rating = rating;
         this.review = review;
         this.arrivalDate = arrivalDate;
         this.buyerId = buyerId;
+        this.isSent = isSent;
     }
 
     public Long getId() {
@@ -63,5 +65,13 @@ public class OrderTableDto {
     }
     public void setBuyerId(Long buyerId) {
         this.buyerId = buyerId;
+    }
+
+    public Boolean getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Boolean isSent) {
+        this.isSent = isSent;
     }
 }

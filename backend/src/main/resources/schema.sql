@@ -108,6 +108,7 @@ CREATE TABLE orderTable (
     review VARCHAR(100),
     arrivalDate TIMESTAMP,
     buyerid INT NOT NULL,
+    isSent BOOLEAN NOT NULL,
     FOREIGN KEY (buyerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
