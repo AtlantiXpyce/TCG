@@ -159,7 +159,7 @@ const CardDetails = () => {
                 </select>
               </div>
 
-              <StockTable stock={stock} />
+              <StockTable stock={stock} setStock={setStock} />
 
             <div className="d-flex justify-content-between">
                 <button

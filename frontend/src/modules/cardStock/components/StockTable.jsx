@@ -1,8 +1,10 @@
 import { useState } from "react";
 import AddToCartButton from "../../cart/components/AddToCartButton";
 
-const StockTable = ({ stock }) => {
+const StockTable = ({ stock, setStock }) => {
   const [quantities, setQuantities] = useState({});
+  const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
   const handleChange = (stockId, value) => {
     setQuantities((prev) => ({
@@ -10,6 +12,41 @@ const StockTable = ({ stock }) => {
       [stockId]: value,
     }));
   };
+
+  const handleDelete = async (stockId) => {
+  if (!token) {
+    alert("Debes iniciar sesión para eliminar stock");
+    return;
+  }
+
+  if (!window.confirm("¿Seguro que quieres eliminar este stock?")) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/admin/deleteStock?stockId=${stockId}`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status >= 200 && response.status < 300) {
+      setStock((prev) => prev.filter((s) => s.id !== stockId));
+    } else if (response.status === 403) {
+      alert("No tienes permisos para eliminar este stock");
+    } else if (response.status === 404) {
+      alert("Stock no encontrado");
+    } else {
+      alert(`Error al eliminar stock (HTTP ${response.status})`);
+    }
+  } catch (err) {
+    console.error("Error en la petición deleteStock:", err);
+    alert("Error de red al eliminar stock");
+  }
+};
+
 
   return (
     <div className="table-responsive">
@@ -21,6 +58,7 @@ const StockTable = ({ stock }) => {
             <th>Cantidad</th>
             <th>Precio</th>
             <th></th>
+            {(role === "ADMIN" || role === "STORE") && <th>Acciones</th>}
           </tr>
         </thead>
         <tbody>
@@ -51,6 +89,16 @@ const StockTable = ({ stock }) => {
                   </select>
                   <AddToCartButton cardStockId={s.id} quantity={selectedQty} />
                 </td>
+                {(role === "ADMIN" || role === "STORE") && (
+                  <td>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(s.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}
