@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 function Header() {
   const username = localStorage.getItem("username");
   const isStore = localStorage.getItem("isStore");
-  const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("role");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,6 +32,10 @@ function Header() {
     navigate("/myStock");
   }
 
+  const goAdmin = () => {
+    navigate("/admin");
+  }
+
   return (
     <header className="bg-light p-3">
       <div className="container d-flex justify-content-between align-items-center">
@@ -42,7 +47,7 @@ function Header() {
             </Link>
             <button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
               Cerrar sesión
-            </button>
+            </button>            
           </div>
         ) : (
           <Link to="/login" className="btn btn-primary btn-sm">
@@ -50,6 +55,11 @@ function Header() {
           </Link>
         )}
         <div className="d-flex gap-2 ms-auto">
+          {(role === "ADMIN") && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goAdmin}>
+              Admin usuarios
+            </button>
+          )}
           {isStore && (
             <button className="btn btn-outline-primary btn-sm" onClick={goStock}>
               Mis ofertas

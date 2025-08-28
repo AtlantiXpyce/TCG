@@ -12,6 +12,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [selectedPos, setSelectedPos] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const username = localStorage.getItem("username");
 
   const markerIcon = useMemo(
     () =>
@@ -128,7 +129,7 @@ const UserProfile = () => {
                 <div>
                   <strong>¿Es tienda?:</strong> {profile.store ? "Sí" : "No"}
                 </div>
-                {!profile.store && !showMap && (
+                {!profile.store && !showMap && username === profile.username && (
                   <button className="btn btn-primary btn-sm" onClick={() => setShowMap(true)}>
                     Volverse tienda
                   </button>
