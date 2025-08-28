@@ -10,10 +10,12 @@ const CardSearch = () => {
   const [cards, setCards] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
   const isStore = localStorage.getItem("isStore") === "true";
+  const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-
     fetch("http://localhost:8080/cards/tcgs")
       .then(res => res.json())
       .then(data => setTcgs(data))
@@ -47,53 +49,76 @@ const CardSearch = () => {
     searchCards(0);
   };
 
+  const handleDelete = async (cardId) => {
+    if (!window.confirm("¿Seguro que quieres eliminar esta carta?")) return;
+
+    try {
+      const response = await fetch(`http://localhost:8080/admin/deleteCard?cardId=${cardId}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        const msg = await response.text();
+        alert(msg || "Error al eliminar la carta");
+        return;
+      }
+
+      alert("Carta eliminada correctamente");
+      searchCards(page);
+    } catch (err) {
+      console.error("Error eliminando la carta", err);
+      alert("Error de conexión con el servidor");
+    }
+  };
+
   return (
     <div className="container py-4">
-        <div className="card shadow-sm">
-            <div className="card-body">
-                <h3 className="card-title mb-4">Buscar cartas</h3>
-                <form onSubmit={handleSubmit} className="row g-3 align-items-end">
-                    <div className="col-md-4">
-                        <label className="form-label">Nombre</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Ej: Charizard"
-                        />
-                    </div>
-                    <div className="col-md-3">
-                        <label className="form-label">TCG</label>
-                        <select
-                            className="form-select"
-                            value={tcgId}
-                            onChange={(e) => setTcgId(e.target.value)}
-                        >
-                            <option value="">Todos</option>
-                            {tcgs.map(tcg => (
-                            <option key={tcg.id} value={tcg.id}>{tcg.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="col-md-3">
-                        <label className="form-label">Set</label>
-                        <select
-                            className="form-select"
-                            value={setId}
-                            onChange={(e) => setSetId(e.target.value)}
-                        >
-                        <option value="">Todos</option>
-                        {sets.map(set => (
-                        <option key={set.id} value={set.id}>{set.name}</option>
-                        ))}
-                        </select>
-                    </div>
-                    <div className="col-md-2">
-                        <button type="submit" className="btn btn-primary w-100">Buscar</button>
-                    </div>
-                </form>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h3 className="card-title mb-4">Buscar cartas</h3>
+          <form onSubmit={handleSubmit} className="row g-3 align-items-end">
+            <div className="col-md-4">
+              <label className="form-label">Nombre</label>
+              <input
+                type="text"
+                className="form-control"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ej: Charizard"
+              />
             </div>
+            <div className="col-md-3">
+              <label className="form-label">TCG</label>
+              <select
+                className="form-select"
+                value={tcgId}
+                onChange={(e) => setTcgId(e.target.value)}
+              >
+                <option value="">Todos</option>
+                {tcgs.map(tcg => (
+                  <option key={tcg.id} value={tcg.id}>{tcg.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Set</label>
+              <select
+                className="form-select"
+                value={setId}
+                onChange={(e) => setSetId(e.target.value)}
+              >
+                <option value="">Todos</option>
+                {sets.map(set => (
+                  <option key={set.id} value={set.id}>{set.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-2">
+              <button type="submit" className="btn btn-primary w-100">Buscar</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <div className="mt-4">
@@ -104,31 +129,42 @@ const CardSearch = () => {
                 <tr>
                   <th>Nombre</th>
                   <th>Set</th>
-                  <th>Numero de carta</th>
+                  <th>Número de carta</th>
                   <th>Rareza</th>
                   <th>TCG</th>
                   <th>Estilo</th>
-                  {(isStore === true) && <th>Acciones</th>}
+                  {isStore && <th>Acciones</th>}
+                  {role === "ADMIN" && <th>Admin</th>}
                 </tr>
               </thead>
               <tbody>
                 {cards.map(card => (
                   <tr key={card.id}>
                     <td>
-                        <Link to={`/cards/${card.id}`} className="text-decoration-none">
-                            {card.name}
-                        </Link>
+                      <Link to={`/cards/${card.id}`} className="text-decoration-none">
+                        {card.name}
+                      </Link>
                     </td>
                     <td>{card.setName}</td>
                     <td>{card.cardNumber}</td>
                     <td>{card.rarityName}</td>
                     <td>{card.tcgName}</td>
                     <td>{card.artVariant}</td>
-                    {(isStore == true) && (
+                    {isStore && (
                       <td>
                         <Link to={`/sell/${card.id}`} className="btn btn-sm btn-success">
                           Vender
                         </Link>
+                      </td>
+                    )}
+                    {role === "ADMIN" && (
+                      <td>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => handleDelete(card.id)}
+                        >
+                          Eliminar
+                        </button>
                       </td>
                     )}
                   </tr>
