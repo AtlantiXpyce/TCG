@@ -18,4 +18,6 @@ public interface OrderService {
     throws UserNotFoundException, OrderNotFoundException, NotTheUserException, AlreadyReviewedException;
 
     public List<OrderTable> getOrdersForSeller(Long sellerId) throws UserNotFoundException;
+
+    public void orderSent(Long sellerId, Long orderId) throws OrderNotFoundException, UserNotFoundException, NotTheUserException;
 }

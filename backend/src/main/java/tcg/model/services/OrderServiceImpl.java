@@ -44,8 +44,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderLine> getOrder(Long orderTableId, Long buyerId) throws UserNotFoundException, NotTheUserException, OrderNotFoundException{
-        Optional<User> userAux = userDao.findById(buyerId);
+    public List<OrderLine> getOrder(Long orderTableId, Long userId) throws UserNotFoundException, NotTheUserException, OrderNotFoundException{
+        Optional<User> userAux = userDao.findById(userId);
         Optional<OrderTable> orderTableAux = orderTableDao.findById(orderTableId);
         if(userAux.isEmpty()){
             throw new UserNotFoundException();
@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
         if(orderTableAux.isEmpty()){
             throw new OrderNotFoundException();
         }
-        if(!(buyerId == orderTableAux.get().getBuyer().getId())){
+        if(!((userId == orderTableAux.get().getBuyer().getId()) || (userId == orderTableAux.get().getSeller().getId()))){
             throw new NotTheUserException();
         }
         return orderLineDao.findByOrderId(orderTableId);
@@ -96,6 +96,28 @@ public class OrderServiceImpl implements OrderService{
         }
         
         return orderTableDao.findBySellerIdOrderByIdDesc(sellerId);
+    }
+
+    @Override
+    public void orderSent(Long sellerId, Long orderId) throws OrderNotFoundException, UserNotFoundException, NotTheUserException {
+        Optional<User> userAux = userDao.findById(sellerId);
+        Optional<OrderTable> orderTableAux = orderTableDao.findById(orderId);
+        OrderTable orderTable;
+
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        if(orderTableAux.isEmpty()){
+            throw new OrderNotFoundException();
+        }
+        if(!(sellerId == orderTableAux.get().getSeller().getId())){
+            throw new NotTheUserException();
+        }
+
+        orderTable = orderTableAux.get();
+        orderTable.setIsSent(true);
+
+        orderTableDao.save(orderTable);
     }
     
     

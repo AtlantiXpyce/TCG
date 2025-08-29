@@ -92,8 +92,8 @@ const OrderDetails = () => {
                 <td>{line.language}</td>
                 <td>{line.condition}</td>
                 <td>{line.quantity}</td>
-                <td>${line.price}</td>
-                <td>${(line.price * line.quantity).toFixed(2)}</td>
+                <td>€{line.price}</td>
+                <td>€{(line.price * line.quantity).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>

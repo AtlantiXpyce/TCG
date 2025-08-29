@@ -90,4 +90,14 @@ public class OrderController {
 
         return "Pedido confirmado y evaluado";
     }
+
+    @PostMapping("/sent")
+    public String confirmOrder(@RequestParam(required = true) Long orderId, HttpServletRequest request) throws UserNotFoundException, NotTheUserException, OrderNotFoundException, AlreadyReviewedException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+
+        orderService.orderSent(authId, orderId);
+        
+        return "Pedido enviado";
+    }
 }

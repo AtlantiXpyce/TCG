@@ -30,6 +30,31 @@ const OrdersSeller = () => {
     }
   };
 
+  const handleMarkAsSent = async (orderId) => {
+    const confirm = window.confirm("¿Seguro que quieres marcar este pedido como enviado?");
+    if (!confirm) return;
+
+    try {
+      const response = await fetch(`http://localhost:8080/orders/sent?orderId=${orderId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const message = await response.text();
+        alert(message);
+        fetchOrders();
+      } else {
+        const errorMsg = await response.text();
+        alert("Error al enviar pedido: " + errorMsg);
+      }
+    } catch (err) {
+      alert("Error de conexión");
+    }
+  };
+
   useEffect(() => {
     if (token) {
       fetchOrders();
@@ -76,6 +101,7 @@ const OrdersSeller = () => {
                   <th>Reseña</th>
                   <th>Enviado?</th>
                   <th>Comprador</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,6 +128,16 @@ const OrdersSeller = () => {
                       >
                         {order.buyerName}
                       </Link>
+                    </td>
+                    <td>
+                      {!order.isSent && (
+                        <button
+                          className="btn btn-sm btn-success"
+                          onClick={() => handleMarkAsSent(order.id)}
+                        >
+                          Marcar como enviado
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

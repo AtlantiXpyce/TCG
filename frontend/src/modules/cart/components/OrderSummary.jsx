@@ -45,7 +45,7 @@ const OrderSummaryPage = () => {
                       <td>{item.language}</td>
                       <td>{item.condition}</td>
                       <td>{item.quantity}</td>
-                      <td>${parseFloat(item.price).toFixed(2)}</td>
+                      <td>€{parseFloat(item.price).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>

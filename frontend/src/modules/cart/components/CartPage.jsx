@@ -129,7 +129,7 @@ const CartPage = () => {
                       <td>{item.language}</td>
                       <td>{item.condition}</td>
                       <td>{item.quantity}</td>
-                      <td>${item.price}</td>
+                      <td>€{item.price}</td>
                       <td>
                         <Link to={`/profile/${item.sellerId}`} className="text-decoration-none">
                             {item.sellerName}

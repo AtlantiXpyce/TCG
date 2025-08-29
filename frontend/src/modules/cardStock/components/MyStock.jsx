@@ -114,7 +114,7 @@ const MyStock = () => {
                     <td>{stock.language}</td>
                     <td>{stock.condition}</td>
                     <td>{stock.quantity}</td>
-                    <td>${stock.price}</td>
+                    <td>€{stock.price}</td>
                     <td>{stock.comment}</td>
                     <td>
                       <button
