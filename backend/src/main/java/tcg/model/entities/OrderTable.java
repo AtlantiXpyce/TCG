@@ -19,13 +19,15 @@ public class OrderTable {
     private String review;
     private LocalDateTime arrivalDate;
     private User buyer;
+    private User seller;
     private Boolean isSent;
 
     public OrderTable() {}
 
-    public OrderTable(LocalDateTime orderDate, User buyer) {
+    public OrderTable(LocalDateTime orderDate, User buyer, User seller) {
         this.orderDate = orderDate;
         this.buyer = buyer;
+        this.seller = seller;
         this.isSent = false;
     }
 
@@ -87,5 +89,15 @@ public class OrderTable {
 
     public void setIsSent(Boolean isSent) {
         this.isSent = isSent;
+    }
+
+    @ManyToOne(optional = false, fetch = LAZY)
+    @JoinColumn(name = "sellerid")
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 }

@@ -10,12 +10,14 @@ public class OrderTableDto {
     private String review;
     private LocalDateTime arrivalDate;
     private Long buyerId;
+    private Long sellerId;    
+    private String sellerName;
     private Boolean isSent;
 
     public OrderTableDto() {}
 
     public OrderTableDto(Long id, LocalDateTime orderDate, Integer rating, String review,
-                         LocalDateTime arrivalDate, Long buyerId, Boolean isSent) {
+                         LocalDateTime arrivalDate, Long buyerId, Boolean isSent, String sellerName, Long sellerId) {
         this.id = id;
         this.orderDate = orderDate;
         this.rating = rating;
@@ -23,6 +25,8 @@ public class OrderTableDto {
         this.arrivalDate = arrivalDate;
         this.buyerId = buyerId;
         this.isSent = isSent;
+        this.sellerName = sellerName;
+        this.sellerId = sellerId;
     }
 
     public Long getId() {
@@ -73,5 +77,21 @@ public class OrderTableDto {
 
     public void setIsSent(Boolean isSent) {
         this.isSent = isSent;
+    }
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
     }
 }

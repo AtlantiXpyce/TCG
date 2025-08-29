@@ -30,7 +30,6 @@ const OrderSummaryPage = () => {
                     <th>Condición</th>
                     <th>Cantidad</th>
                     <th>Precio</th>
-                    <th>Vendedor</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -47,11 +46,6 @@ const OrderSummaryPage = () => {
                       <td>{item.condition}</td>
                       <td>{item.quantity}</td>
                       <td>${parseFloat(item.price).toFixed(2)}</td>
-                      <td>
-                        <Link to={`/profile/${item.sellerId}`} className="text-decoration-none">
-                            {item.sellerName}
-                        </Link>
-                      </td>
                     </tr>
                   ))}
                 </tbody>

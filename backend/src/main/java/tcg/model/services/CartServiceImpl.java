@@ -147,7 +147,7 @@ public class CartServiceImpl implements CartService{
             User seller = entry.getKey();
             List<Cart> sellerCarts = entry.getValue();
 
-            OrderTable orderTable = new OrderTable(LocalDateTime.now(), userAux.get());
+            OrderTable orderTable = new OrderTable(LocalDateTime.now(), userAux.get(), seller);
             orderTableDao.save(orderTable);
 
             for (Cart cart : sellerCarts) {
@@ -157,8 +157,7 @@ public class CartServiceImpl implements CartService{
                         cart.getCardStock().getLang().getName(),
                         cart.getCardStock().getPrice(),
                         cart.getQuantity(),
-                        cart.getCardStock().getCondition().getName(),
-                        seller
+                        cart.getCardStock().getCondition().getName()
                 );
 
                 cart.getCardStock().setCartQuantity(cart.getCardStock().getCartQuantity() - cart.getQuantity());

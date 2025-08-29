@@ -75,7 +75,6 @@ const OrderDetails = () => {
               <th>Set</th>
               <th>Idioma</th>
               <th>Condición</th>
-              <th>Vendedor</th>
               <th>Cantidad</th>
               <th>Precio unitario</th>
               <th>Subtotal</th>
@@ -92,11 +91,6 @@ const OrderDetails = () => {
                 <td>{line.cardSetName}</td>
                 <td>{line.language}</td>
                 <td>{line.condition}</td>
-                <td>
-                  <Link to={`/profile/${line.sellerId}`} className="text-decoration-none">
-                    {line.sellerName}
-                  </Link>
-                </td>
                 <td>{line.quantity}</td>
                 <td>${line.price}</td>
                 <td>${(line.price * line.quantity).toFixed(2)}</td>

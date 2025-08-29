@@ -108,8 +108,10 @@ CREATE TABLE orderTable (
     review VARCHAR(100),
     arrivalDate TIMESTAMP,
     buyerid INT NOT NULL,
+    sellerid INT NOT NULL,
     isSent BOOLEAN NOT NULL,
-    FOREIGN KEY (buyerid) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (buyerid) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderLine (
@@ -120,8 +122,6 @@ CREATE TABLE orderLine (
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
-    sellerid INT NOT NULL,
-    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (orderid) REFERENCES orderTable(id) ON DELETE CASCADE,
     FOREIGN KEY (cardid) REFERENCES card(id) ON DELETE CASCADE
 );

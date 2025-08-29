@@ -20,18 +20,16 @@ public class OrderLine {
     private BigDecimal price;
     private int quantity;
     private String condition;
-    private User seller;
 
     public OrderLine() {}
 
-    public OrderLine(OrderTable order, Card card, String language, BigDecimal price, int quantity, String condition, User seller) {
+    public OrderLine(OrderTable order, Card card, String language, BigDecimal price, int quantity, String condition) {
         this.order = order;
         this.card = card;
         this.language = language;
         this.price = price;
         this.quantity = quantity;
         this.condition = condition;
-        this.seller = seller;
     }
 
     @Id
@@ -94,15 +92,5 @@ public class OrderLine {
 
     public void setCondition(String condition) {
         this.condition = condition;
-    }
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "sellerId")
-    public User getSeller() {
-        return seller;
-    }
-
-    public void setSeller(User seller) {
-        this.seller = seller;
     }
 }

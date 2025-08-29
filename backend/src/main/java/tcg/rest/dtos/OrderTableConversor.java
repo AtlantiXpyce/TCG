@@ -21,7 +21,9 @@ public class OrderTableConversor {
             order.getReview(),
             order.getArrivalDate(),
             order.getBuyer() != null ? order.getBuyer().getId() : null,
-            order.getIsSent()
+            order.getIsSent(),
+            order.getSeller() != null ? order.getSeller().getUsername() : null,
+            order.getSeller() != null ? order.getSeller().getId() : null
         );
     }
 

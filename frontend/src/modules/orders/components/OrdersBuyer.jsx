@@ -75,6 +75,7 @@ const OrdersBuyer = () => {
                   <th>Valoración</th>
                   <th>Reseña</th>
                   <th>Enviado?</th>
+                  <th>Vendedor</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,6 +91,11 @@ const OrdersBuyer = () => {
                     <td>{order.rating ?? "-"}</td>
                     <td>{order.review || "-"}</td>
                     <td>{order.isSent ? "Sí" : "No"}</td>
+                    <td>
+                      <Link to={`/profile/${order.sellerId}`} state={{rating: order.rating, review: order.review}} className="text-decoration-none">
+                            {order.sellerName}
+                        </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
