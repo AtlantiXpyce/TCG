@@ -65,6 +65,14 @@ public class OrderController {
         return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForBuyer(authId));
     }
 
+    @GetMapping("/seller")
+    public List<OrderTableDto> getOrdersForSeller(HttpServletRequest request) throws UserNotFoundException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+
+        return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForSeller(authId));
+    }
+
     @GetMapping("/lines")
     public List<OrderLineDto> getOrderLines(@RequestParam(required = true) Long orderId, HttpServletRequest request) throws UserNotFoundException, NotTheUserException, OrderNotFoundException{
         String token = request.getHeader("Authorization").substring(7);

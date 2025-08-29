@@ -19,6 +19,7 @@ public class OrderTableConversor {
             order.getOrderDate(),
             order.getRating(),
             order.getReview(),
+            order.getBuyer() != null ? order.getBuyer().getUsername() : null,
             order.getArrivalDate(),
             order.getBuyer() != null ? order.getBuyer().getId() : null,
             order.getIsSent(),

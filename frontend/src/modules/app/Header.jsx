@@ -36,6 +36,10 @@ function Header() {
     navigate("/admin");
   }
 
+  const goOrdersSeller = () => {
+    navigate("/orderSeller");
+  }
+
   return (
     <header className="bg-light p-3">
       <div className="container d-flex justify-content-between align-items-center">
@@ -58,6 +62,11 @@ function Header() {
           {(role === "ADMIN") && (
             <button className="btn btn-outline-primary btn-sm" onClick={goAdmin}>
               Admin usuarios
+            </button>
+          )}
+          {isStore && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goOrdersSeller}>
+              Centro pedidos
             </button>
           )}
           {isStore && (

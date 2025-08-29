@@ -86,5 +86,17 @@ public class OrderServiceImpl implements OrderService{
 
         orderTableDao.save(orderTable);
     }
+
+    @Override
+    public List<OrderTable> getOrdersForSeller(Long sellerId) throws UserNotFoundException{
+        Optional<User> userAux = userDao.findById(sellerId);
+
+        if(userAux.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        
+        return orderTableDao.findBySellerIdOrderByIdDesc(sellerId);
+    }
+    
     
 }

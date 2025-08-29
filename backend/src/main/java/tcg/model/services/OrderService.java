@@ -17,5 +17,5 @@ public interface OrderService {
     public void reviewOrder(Long orderTableId, Integer rating, String review, Long buyerId)
     throws UserNotFoundException, OrderNotFoundException, NotTheUserException, AlreadyReviewedException;
 
-    //public List<OrderLine> getOrderForSeller(Long sellerId);
+    public List<OrderTable> getOrdersForSeller(Long sellerId) throws UserNotFoundException;
 }

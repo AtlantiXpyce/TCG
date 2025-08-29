@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddToCartButton from "../../cart/components/AddToCartButton";
+import { Link } from "react-router-dom";
 
 const StockTable = ({ stock, setStock }) => {
   const [quantities, setQuantities] = useState({});
@@ -57,6 +58,7 @@ const StockTable = ({ stock, setStock }) => {
             <th>Condición</th>
             <th>Cantidad</th>
             <th>Precio</th>
+            <th>Vendedor</th>
             <th></th>
             {(role === "ADMIN" || role === "STORE") && <th>Acciones</th>}
           </tr>
@@ -69,7 +71,12 @@ const StockTable = ({ stock, setStock }) => {
                 <td>{s.language}</td>
                 <td>{s.condition}</td>
                 <td>{s.quantity}</td>
-                <td>${s.price}</td>
+                <td>€{s.price}</td>
+                <td>
+                  <Link to={`/profile/${s.sellerId}`} className="text-decoration-none">
+                      {s.sellerUsername}
+                  </Link>
+                </td>
                 <td className="d-flex align-items-center gap-2">
                   <select
                     className="form-select form-select-sm"
