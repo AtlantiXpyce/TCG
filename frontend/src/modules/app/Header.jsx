@@ -64,12 +64,12 @@ function Header() {
               Admin usuarios
             </button>
           )}
-          {isStore && (
+          {isStore === "true" && (
             <button className="btn btn-outline-primary btn-sm" onClick={goOrdersSeller}>
               Centro pedidos
             </button>
           )}
-          {isStore && (
+          {isStore === "true" && (
             <button className="btn btn-outline-primary btn-sm" onClick={goStock}>
               Mis ofertas
             </button>

@@ -51,7 +51,7 @@ const StockTable = ({ stock, setStock }) => {
 
   return (
     <div className="table-responsive">
-      <table className="table table-striped table-hover">
+      <table className="table table-striped table-hover w-100">
         <thead>
           <tr>
             <th>Idioma</th>
@@ -59,8 +59,14 @@ const StockTable = ({ stock, setStock }) => {
             <th>Cantidad</th>
             <th>Precio</th>
             <th>Vendedor</th>
-            <th></th>
-            {(role === "ADMIN" || role === "STORE") && <th>Acciones</th>}
+            <th className="text-center" style={{ minWidth: "130px" }}>
+              Comprar
+            </th>
+            {(role === "ADMIN" || role === "STORE") && (
+              <th className="text-center" style={{ minWidth: "120px" }}>
+                Acciones
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -73,11 +79,14 @@ const StockTable = ({ stock, setStock }) => {
                 <td>{s.quantity}</td>
                 <td>€{s.price}</td>
                 <td>
-                  <Link to={`/profile/${s.sellerId}`} className="text-decoration-none">
-                      {s.sellerUsername}
+                  <Link
+                    to={`/profile/${s.sellerId}`}
+                    className="text-decoration-none"
+                  >
+                    {s.sellerUsername}
                   </Link>
                 </td>
-                <td className="d-flex align-items-center gap-2">
+                <td className="d-flex align-items-center justify-content-center gap-2">
                   <select
                     className="form-select form-select-sm"
                     style={{ width: "70px" }}
@@ -97,7 +106,7 @@ const StockTable = ({ stock, setStock }) => {
                   <AddToCartButton cardStockId={s.id} quantity={selectedQty} />
                 </td>
                 {(role === "ADMIN" || role === "STORE") && (
-                  <td>
+                  <td className="text-center">
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDelete(s.id)}
@@ -112,6 +121,7 @@ const StockTable = ({ stock, setStock }) => {
         </tbody>
       </table>
     </div>
+
   );
 };
 

@@ -123,9 +123,9 @@ const CardDetails = () => {
 
   return (
   <div style={{paddingTop: '60px' ,paddingBottom: '50px' }}>
-      <div className="d-flex align-items-center justify-content-center">
-      <div className="d-flex flex-column" style={{ maxWidth: 600, width: "100%" }}>
-          <div className="card shadow-sm mb-4" style={{ maxWidth: 600, width: "100%" }}>
+      <div className="d-flex align-items-center justify-content-center w-100">
+      <div className="d-flex flex-column" style={{ maxWidth: 800, width: "100%" }}>
+          <div className="card shadow-sm mb-4" style={{ maxWidth: 800, width: "100%" }}>
             <div className="card-body p-4">
               <h3 className="card-title text-center mb-4">{card.name}</h3>
               <div className="d-flex flex-column align-items-center">
@@ -141,7 +141,7 @@ const CardDetails = () => {
             </div>
           </div>
           {token && (
-            <div className="card shadow-sm p-4" style={{ maxWidth: 600, width: "100%" }}>
+            <div className="card shadow-sm p-4" style={{ maxWidth: 800, width: "100%" }}>
               <h5>Stock disponible</h5>
 
               <div className="mb-3">
