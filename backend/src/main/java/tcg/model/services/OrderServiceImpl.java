@@ -119,6 +119,13 @@ public class OrderServiceImpl implements OrderService{
 
         orderTableDao.save(orderTable);
     }
+
+    public Double getAverageRatingForSeller(Long sellerId) throws UserNotFoundException {
+        if (userDao.findById(sellerId).isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        return orderTableDao.findAverageRatingForSeller(sellerId);
+    }
     
     
 }

@@ -67,6 +67,29 @@ const UserProfile = () => {
     fetchProfile();
   }, [id]);
 
+  const renderStars = (rating) => {
+    const stars = [];
+    const totalStars = 5;
+    const fullStars = Math.floor(rating);
+    const decimal = rating - fullStars;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<i key={`full-${i}`} className="bi bi-star-fill text-warning"></i>);
+    }
+
+    if (decimal >= 0.25 && decimal < 0.75) {
+      stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
+    } else if (decimal >= 0.75) {
+      stars.push(<i key="extra-full" className="bi bi-star-fill text-warning"></i>);
+    }
+
+    while (stars.length < totalStars) {
+      stars.push(<i key={`empty-${stars.length}`} className="bi bi-star text-warning"></i>);
+    }
+
+    return <div>{stars}</div>;
+  };
+
   const handleEnableStore = async () => {
     if (!selectedPos) {
       alert("Por favor selecciona una ubicación en el mapa");
@@ -135,7 +158,15 @@ const UserProfile = () => {
                   </button>
                 )}
               </div>
-
+              {profile.store && (
+                <div className="mb-3">
+                  <strong>Valoración media:</strong>
+                  <div className="d-flex align-items-center">
+                    {renderStars(profile.rating || 0)}
+                    <small className="ms-2">({profile.rating?.toFixed(1)})</small>
+                  </div>
+                </div>
+              )}
               {profile.store && (
                 <>
                   <div className="mb-2">

@@ -20,4 +20,6 @@ public interface OrderService {
     public List<OrderTable> getOrdersForSeller(Long sellerId) throws UserNotFoundException;
 
     public void orderSent(Long sellerId, Long orderId) throws OrderNotFoundException, UserNotFoundException, NotTheUserException;
+
+    public Double getAverageRatingForSeller(Long sellerId) throws UserNotFoundException;
 }

@@ -7,17 +7,19 @@ public class UserProfileDto {
     private boolean isStore;
     private Double latitude;
     private Double longitude;
+    private Double rating;
 
     public UserProfileDto() {
     }
 
-    public UserProfileDto(Long id, String username, String firstName, boolean isStore, Double longitude, Double latitude) {
+    public UserProfileDto(Long id, String username, String firstName, boolean isStore, Double longitude, Double latitude, Double rating) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.isStore = isStore;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.rating = rating;
     }
 
     public Long getId(){
@@ -66,5 +68,13 @@ public class UserProfileDto {
 
     public void setLongitude(Double longitude){
         this.longitude = longitude;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }
