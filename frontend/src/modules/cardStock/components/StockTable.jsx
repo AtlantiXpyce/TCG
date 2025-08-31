@@ -58,6 +58,7 @@ const StockTable = ({ stock, setStock }) => {
             <th>Condición</th>
             <th>Cantidad</th>
             <th>Precio</th>
+            <th>Comentario</th>
             <th>Vendedor</th>
             <th className="text-center" style={{ minWidth: "130px" }}>
               Comprar
@@ -78,6 +79,7 @@ const StockTable = ({ stock, setStock }) => {
                 <td>{s.condition}</td>
                 <td>{s.quantity}</td>
                 <td>€{s.price}</td>
+                <td>{s.comment}</td>
                 <td>
                   <Link
                     to={`/profile/${s.sellerId}`}
