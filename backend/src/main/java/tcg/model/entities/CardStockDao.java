@@ -14,11 +14,14 @@ public interface CardStockDao extends CrudRepository<CardStock, Long>, ListPagin
         WHERE cs.card.id = :cardId
         AND cs.quantity > 0
         AND (COALESCE(:language, '') = '' OR cs.lang.name = :language)
+        AND (COALESCE(:condition, '') = '' OR cs.condition.name = :condition)
         ORDER BY cs.price ASC
     """)
     Page<CardStock> findStock(@Param("cardId") Long cardId,
                             @Param("language") String language,
+                            @Param("condition") String condition,
                             Pageable pageable);
+
 
     @Query("""
         SELECT cs FROM CardStock cs

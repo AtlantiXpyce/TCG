@@ -66,9 +66,9 @@ class CardStockServiceImplTest {
     @Test
     void findStock_returnsPage() {
         Page<CardStock> page = new PageImpl<>(List.of(new CardStock()));
-        when(cardStockDao.findStock(eq(1L), any(), any(Pageable.class))).thenReturn(page);
+        when(cardStockDao.findStock(eq(1L), any(), any(),any(Pageable.class))).thenReturn(page);
 
-        Page<CardStock> result = cardStockService.findStock(1L, "", Pageable.unpaged());
+        Page<CardStock> result = cardStockService.findStock(1L, "", "", Pageable.unpaged());
 
         assertEquals(1, result.getTotalElements());
     }

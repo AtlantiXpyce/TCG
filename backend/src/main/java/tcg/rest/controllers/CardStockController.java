@@ -92,9 +92,9 @@ public class CardStockController {
     }
 
     @GetMapping("/find")
-    public Page<CardStockDto> findStock(@RequestParam(required = true) Long id, @RequestParam(required = false) String language, int page) {
+    public Page<CardStockDto> findStock(@RequestParam(required = true) Long id, @RequestParam(required = false) String language, String condition, int page) {
         Pageable pageable = createPageable(page);
-        Page<CardStock> cardPage = cardStockService.findStock(id, language, pageable);
+        Page<CardStock> cardPage = cardStockService.findStock(id, language, condition, pageable);
         return CardStockConversor.toCardStockDtos(cardPage);
     }
 

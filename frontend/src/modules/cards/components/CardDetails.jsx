@@ -12,7 +12,9 @@ const CardDetails = () => {
 
   const [stock, setStock] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [conditions, setConditions] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedCondition, setSelectedCondition] = useState("");
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -60,8 +62,21 @@ const CardDetails = () => {
   }, []);
 
   useEffect(() => {
+    const fetchConditions = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/cardStock/conditions`);
+        const data = await response.json();
+        setConditions(data);
+      } catch (err) {
+        console.error("Error cargando condiciones", err);
+      }
+    };
+    fetchConditions();
+  }, []);
+
+  useEffect(() => {
     if (token) fetchStock();
-  }, [id, selectedLanguage, page, token]);
+  }, [id, selectedLanguage, selectedCondition, page, token]);
 
   const fetchStock = async () => {
     try {
@@ -69,6 +84,7 @@ const CardDetails = () => {
       url.searchParams.append("id", id);
       url.searchParams.append("page", page);
       if (selectedLanguage) url.searchParams.append("language", selectedLanguage);
+      if (selectedCondition) url.searchParams.append("condition", selectedCondition);
 
       const response = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -89,6 +105,11 @@ const CardDetails = () => {
 
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
+    setPage(0);
+  };
+
+  const handleConditionChange = (e) => {
+    setSelectedCondition(e.target.value);
     setPage(0);
   };
 
@@ -144,24 +165,42 @@ const CardDetails = () => {
             <div className="card shadow-sm p-4" style={{ maxWidth: 800, width: "100%" }}>
               <h5>Stock disponible</h5>
 
-              <div className="mb-3">
-              <label htmlFor="languageSelect" className="form-label">Filtrar por idioma:</label>
-                <select
-                  id="languageSelect"
-                  className="form-select"
-                  value={selectedLanguage}
-                  onChange={handleLanguageChange}
-                >
-                  <option value="">Todos</option>
-                {languages.map(lang => (
-                  <option key={lang.id} value={lang.name}>{lang.name}</option>
-                  ))}
-                </select>
+              <div className="mb-3 d-flex align-items-end gap-3">
+                <div className="flex-fill">
+                  <label htmlFor="languageSelect" className="form-label">Filtrar por idioma:</label>
+                  <select
+                    id="languageSelect"
+                    className="form-select"
+                    value={selectedLanguage}
+                    onChange={handleLanguageChange}
+                  >
+                    <option value="">Todos</option>
+                    {languages.map(lang => (
+                      <option key={lang.id} value={lang.name}>{lang.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex-fill">
+                  <label htmlFor="conditionSelect" className="form-label">Filtrar por condición:</label>
+                  <select
+                    id="conditionSelect"
+                    className="form-select"
+                    value={selectedCondition}
+                    onChange={handleConditionChange}
+                  >
+                    <option value="">Todas</option>
+                    {conditions.map((cond) => (
+                      <option key={cond.id} value={cond.name}>{cond.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
 
               <StockTable stock={stock} setStock={setStock} />
 
-            <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between">
                 <button
                   className="btn btn-outline-secondary"
                   onClick={() => handlePageChange(page - 1)}
@@ -169,7 +208,7 @@ const CardDetails = () => {
                 >
                   Anterior
                 </button>
-              <span>Página {page + 1} de {totalPages}</span>
+                <span>Página {page + 1} de {totalPages}</span>
                 <button
                   className="btn btn-outline-secondary"
                   onClick={() => handlePageChange(page + 1)}
