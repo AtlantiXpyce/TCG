@@ -23,6 +23,7 @@ public class User {
     private boolean isStore;
     private String role;
     private Location location;
+    private String address;
 
     public User() {}
 
@@ -101,5 +102,13 @@ public class User {
 
     public void setLocation(Location location){
         this.location = location;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -6,7 +6,7 @@ const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { rating, review } = location.state || {};
+  const { rating, review, isSeller } = location.state || {};
   const [orderLines, setOrderLines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -102,20 +102,24 @@ const OrderDetails = () => {
               <th colSpan="7" className="text-end">
                 Total
               </th>
-              <th>${total.toFixed(2)}</th>
+              <th>€{total.toFixed(2)}</th>
             </tr>
           </tfoot>
         </table>
       </div>
-      {rating !== null ? (
-        <div className="card p-4 mt-4 shadow-sm">
-          <h4 className="mb-3 text-center">Tu valoración</h4>
-          <p><strong>Puntuación:</strong> {rating} / 5</p>
-          <p><strong>Comentario:</strong> {review || "Sin comentario"}</p>
-        </div>
-      ) : (
-        <ReviewForm orderTableId={id} buyerId={localStorage.getItem("userId")} />
+
+      {!isSeller && (
+        rating !== null ? (
+          <div className="card p-4 mt-4 shadow-sm">
+            <h4 className="mb-3 text-center">Tu valoración</h4>
+            <p><strong>Puntuación:</strong> {rating} / 5</p>
+            <p><strong>Comentario:</strong> {review || "Sin comentario"}</p>
+          </div>
+        ) : (
+          <ReviewForm orderTableId={id} buyerId={localStorage.getItem("userId")} />
+        )
       )}
+
       <button className="btn btn-secondary mt-3" onClick={() => navigate(-1)}>
         Volver
       </button>

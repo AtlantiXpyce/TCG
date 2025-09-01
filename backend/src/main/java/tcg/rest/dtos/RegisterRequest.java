@@ -24,6 +24,9 @@ public class RegisterRequest {
     @NotBlank(message = "El apellido es obligatorio")
     private String lastName;
 
+    @NotBlank(message = "La dirección es obligatoria")
+    private String address;
+
     public RegisterRequest() {}
 
     public String getUsername() {
@@ -64,5 +67,13 @@ public class RegisterRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

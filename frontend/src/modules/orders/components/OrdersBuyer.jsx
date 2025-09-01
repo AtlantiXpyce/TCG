@@ -92,7 +92,7 @@ const OrdersBuyer = () => {
                     <td>{order.review || "-"}</td>
                     <td>{order.isSent ? "Sí" : "No"}</td>
                     <td>
-                      <Link to={`/profile/${order.sellerId}`} state={{rating: order.rating, review: order.review}} className="text-decoration-none">
+                      <Link to={`/profile/${order.sellerId}`} state={{rating: order.rating, review: order.review, isSeller: order.isSeller}} className="text-decoration-none">
                             {order.sellerName}
                         </Link>
                     </td>

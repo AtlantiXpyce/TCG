@@ -27,6 +27,7 @@ CREATE TABLE users (
     isStore BOOLEAN NOT NULL DEFAULT FALSE,
     role VARCHAR(50) NOT NULL,
     locationid INT,
+    address VARCHAR(100) NOT NULL,
     FOREIGN KEY (locationid) REFERENCES locations(id)
 );
 
@@ -181,15 +182,15 @@ INSERT INTO locations (latitude, longitude) VALUES
 (40.4168, -3.7038),
 (41.3874, 2.1686);
 
-INSERT INTO users (username, firstName, lastName, email, password, isStore, role, locationid) VALUES
+INSERT INTO users (username, firstName, lastName, email, password, isStore, role, locationid, address) VALUES
 ('adminS', 'Laura', 'Gómez', 'admin_store@example.com',
-'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'ADMIN', 1),
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'ADMIN', 1, 'Calle de Ruifino González 24, 5ºC, Madrid, España'),
 ('adminU', 'Carlos', 'Pérez', 'admin_user@example.com',
-'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'ADMIN', NULL),
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'ADMIN', NULL, 'Calle Maria Blanchard 13, 3ºD, Santander, España'),
 ('userS', 'María', 'López', 'store_user@example.com',
-'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'USER', 2),
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'USER', 2, 'Calle de Balmes 229, 4ºB, Barcelona, España'),
 ('userU', 'José', 'Martínez', 'normal_user@example.com',
-'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'USER', NULL);
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'USER', NULL, 'Calle Alfredo Vicenti 15, 2ªA, A Coruña, España');
 
 INSERT INTO cardStock (cardid, sellerid, price, quantity, conditionid, comment, lang, cartQuantity) VALUES
 (14, (1), 5.01, 10, 1, 'Como nueva', 1, 0),

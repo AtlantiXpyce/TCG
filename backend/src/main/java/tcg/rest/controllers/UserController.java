@@ -77,6 +77,7 @@ public class UserController {
         user.setLastName(request.getLastName());
         user.setStore(false); 
         user.setRole("USER");
+        user.setAddress(request.getAddress());
         userService.register(user);
         UserResponse response = new UserResponse(user);
         return ResponseEntity.ok(response);

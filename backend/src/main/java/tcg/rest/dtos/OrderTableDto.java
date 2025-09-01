@@ -14,11 +14,13 @@ public class OrderTableDto {
     private Long sellerId;
     private String sellerName;
     private Boolean isSent;
+    private String address;
+    private Boolean isSeller;
 
     public OrderTableDto() {}
 
     public OrderTableDto(Long id, LocalDateTime orderDate, Integer rating, String review, String buyerName,
-                         LocalDateTime arrivalDate, Long buyerId, Boolean isSent, String sellerName, Long sellerId) {
+                         LocalDateTime arrivalDate, Long buyerId, Boolean isSent, String sellerName, Long sellerId, String address, Boolean isSeller) {
         this.id = id;
         this.orderDate = orderDate;
         this.rating = rating;
@@ -29,6 +31,8 @@ public class OrderTableDto {
         this.isSent = isSent;
         this.sellerName = sellerName;
         this.sellerId = sellerId;
+        this.address = address;
+        this.isSeller = isSeller;
     }
 
     public Long getId() {
@@ -103,5 +107,21 @@ public class OrderTableDto {
 
     public void setBuyerName(String buyerName) {
         this.buyerName = buyerName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Boolean getIsSeller() {
+        return isSeller;
+    }
+
+    public void setIsSeller(Boolean isSeller) {
+        this.isSeller = isSeller;
     }
 }

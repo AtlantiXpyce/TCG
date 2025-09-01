@@ -101,6 +101,7 @@ const OrdersSeller = () => {
                   <th>Reseña</th>
                   <th>Enviado?</th>
                   <th>Comprador</th>
+                  <th>Dirección</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -110,7 +111,7 @@ const OrdersSeller = () => {
                     <td>
                       <Link
                         to={`/order/${order.id}`}
-                        state={{ rating: order.rating, review: order.review }}
+                        state={{ rating: order.rating, review: order.review, isSeller: order.isSeller}}
                         className="text-decoration-none"
                       >
                         {order.id}
@@ -129,6 +130,7 @@ const OrdersSeller = () => {
                         {order.buyerName}
                       </Link>
                     </td>
+                    <td>{order.address}</td>
                     <td>
                       {!order.isSent && (
                         <button

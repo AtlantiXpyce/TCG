@@ -62,7 +62,7 @@ public class OrderController {
         String token = request.getHeader("Authorization").substring(7);
         Long authId = jwtGenerator.getIdFromToken(token);
 
-        return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForBuyer(authId));
+        return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForBuyer(authId), false);
     }
 
     @GetMapping("/seller")
@@ -70,7 +70,7 @@ public class OrderController {
         String token = request.getHeader("Authorization").substring(7);
         Long authId = jwtGenerator.getIdFromToken(token);
 
-        return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForSeller(authId));
+        return OrderTableConversor.toOrderTableDtos(orderService.getOrdersForSeller(authId), true);
     }
 
     @GetMapping("/lines")
