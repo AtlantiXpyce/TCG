@@ -19,6 +19,8 @@ import tcg.model.entities.ConditionDao;
 import tcg.model.entities.User;
 import tcg.model.entities.UserDao;
 import tcg.model.exceptions.CardNotFoundException;
+import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 
 @Service
@@ -46,8 +48,13 @@ public class CardStockServiceImpl implements CardStockService{
     }
     
     @Override
-    public Page<CardStock> findStock(Long id, String language, Pageable pageable) {
-        return cardStockDao.findStock(id, (language == null || language.isBlank()) ? null : language, pageable);
+    public Page<CardStock> findStock(Long id, String language, String condition, Pageable pageable) {
+        return cardStockDao.findStock(
+            id,
+            (language == null || language.isBlank()) ? null : language,
+            (condition == null || condition.isBlank()) ? null : condition,
+            pageable
+        );
     }
 
     @Override
@@ -59,5 +66,27 @@ public class CardStockServiceImpl implements CardStockService{
         
         CardStock stock = new CardStock(card, seller, price, quantity, condition, comment, lang);
         return cardStockDao.save(stock);
+    }
+
+    @Override
+    public Page<CardStock> getSellerStocks(Long sellerId, Pageable pageable) throws UserNotFoundException{
+        userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
+        
+        return cardStockDao.findByUserId(sellerId, pageable);
+    }
+
+    @Override
+    public void deleteStock(Long stockId, Long sellerId) throws UserNotFoundException, CardStockNotFoundException, NotTheUserException {
+        User seller = userDao.findById(sellerId).orElseThrow(UserNotFoundException::new);
+        CardStock stock = cardStockDao.findById(stockId).orElseThrow(CardStockNotFoundException::new);
+        
+        if (!sellerId.equals(stock.getSeller().getId())) {
+            if (!seller.getRole().equals("ADMIN")) {
+                throw new NotTheUserException();
+            }
+        }
+
+        cardStockDao.delete(stock);
+        
     }
 }

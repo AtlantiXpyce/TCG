@@ -2,19 +2,42 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const username = localStorage.getItem("username");
-  const navigate = useNavigate();
+  const isStore = localStorage.getItem("isStore");
   const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("role");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     localStorage.removeItem("userId");
+    localStorage.removeItem("isStore");
     navigate("/login");
   };
 
   const goBack = () => {
     navigate("/");
+  }
+  
+  const goCart = () => {
+    navigate("/cart");
+  }
+
+  const goOrders = () => {
+    navigate("/ordersBuyer");
+  }
+
+  const goStock = () => {
+    navigate("/myStock");
+  }
+
+  const goAdmin = () => {
+    navigate("/admin");
+  }
+
+  const goOrdersSeller = () => {
+    navigate("/orderSeller");
   }
 
   return (
@@ -28,16 +51,43 @@ function Header() {
             </Link>
             <button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
               Cerrar sesión
-            </button>
+            </button>            
           </div>
         ) : (
           <Link to="/login" className="btn btn-primary btn-sm">
             Iniciar sesión
           </Link>
         )}
-        <button className="btn btn-outline-primary btn-sm" onClick={goBack}>
-          Home
-        </button>
+        <div className="d-flex gap-2 ms-auto">
+          {(role === "ADMIN") && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goAdmin}>
+              Admin usuarios
+            </button>
+          )}
+          {isStore === "true" && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goOrdersSeller}>
+              Centro pedidos
+            </button>
+          )}
+          {isStore === "true" && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goStock}>
+              Mis ofertas
+            </button>
+          )}
+          {username && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goCart}>
+              Carrito
+            </button>
+          )}
+          {username && (
+            <button className="btn btn-outline-primary btn-sm" onClick={goOrders}>
+              Mis pedidos
+            </button>
+          )}
+          <button className="btn btn-outline-primary btn-sm" onClick={goBack}>
+            Home
+          </button>
+        </div>
       </div>
     </header>
   );

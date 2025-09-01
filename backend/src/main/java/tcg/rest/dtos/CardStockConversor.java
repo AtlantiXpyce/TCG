@@ -18,6 +18,7 @@ public class CardStockConversor {
             stock.getId(),
             stock.getCard() != null ? stock.getCard().getId() : null,
             stock.getSeller() != null ? stock.getSeller().getId() : null,
+            stock.getSeller() != null ? stock.getSeller().getUsername() : null,
             stock.getLang() != null ? stock.getLang().getName() : null,
             stock.getPrice(),
             stock.getQuantity(),

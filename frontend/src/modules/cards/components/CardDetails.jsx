@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import StockTable from "../../cardStock/components/StockTable"; 
 
 const CardDetails = () => {
   const { id } = useParams();
@@ -11,12 +12,14 @@ const CardDetails = () => {
 
   const [stock, setStock] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [conditions, setConditions] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedCondition, setSelectedCondition] = useState("");
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
   const token = localStorage.getItem("token");
-  
+
   useEffect(() => {
     const fetchCard = async () => {
       try {
@@ -59,8 +62,21 @@ const CardDetails = () => {
   }, []);
 
   useEffect(() => {
+    const fetchConditions = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/cardStock/conditions`);
+        const data = await response.json();
+        setConditions(data);
+      } catch (err) {
+        console.error("Error cargando condiciones", err);
+      }
+    };
+    fetchConditions();
+  }, []);
+
+  useEffect(() => {
     if (token) fetchStock();
-  }, [id, selectedLanguage, page, token]);
+  }, [id, selectedLanguage, selectedCondition, page, token]);
 
   const fetchStock = async () => {
     try {
@@ -68,6 +84,7 @@ const CardDetails = () => {
       url.searchParams.append("id", id);
       url.searchParams.append("page", page);
       if (selectedLanguage) url.searchParams.append("language", selectedLanguage);
+      if (selectedCondition) url.searchParams.append("condition", selectedCondition);
 
       const response = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -88,6 +105,11 @@ const CardDetails = () => {
 
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
+    setPage(0);
+  };
+
+  const handleConditionChange = (e) => {
+    setSelectedCondition(e.target.value);
     setPage(0);
   };
 
@@ -122,87 +144,84 @@ const CardDetails = () => {
 
   return (
   <div style={{paddingTop: '60px' ,paddingBottom: '50px' }}>
-    <div className="d-flex align-items-center justify-content-center">
-      <div className="d-flex flex-column" style={{ maxWidth: 600, width: "100%" }}>
-        <div className="card shadow-sm mb-4" style={{ maxWidth: 600, width: "100%" }}>
-          <div className="card-body p-4">
-            <h3 className="card-title text-center mb-4">{card.name}</h3>
-            <div className="d-flex flex-column align-items-center">
+      <div className="d-flex align-items-center justify-content-center w-100">
+      <div className="d-flex flex-column" style={{ maxWidth: 800, width: "100%" }}>
+          <div className="card shadow-sm mb-4" style={{ maxWidth: 800, width: "100%" }}>
+            <div className="card-body p-4">
+              <h3 className="card-title text-center mb-4">{card.name}</h3>
+              <div className="d-flex flex-column align-items-center">
               <img src={imageSrc} alt={card.name} style={{ maxWidth: "100%", borderRadius: 8 }} className="mb-4" />
-              <div className="w-100">
-                <p><strong>Nombre TCG:</strong> {card.tcgName}</p>
-                <p><strong>Número de carta:</strong> {card.cardNumber}</p>
-                <p><strong>Variante de arte:</strong> {card.artVariant}</p>
-                <p><strong>Nombre del set:</strong> {card.setName}</p>
-                <p><strong>Rareza:</strong> {card.rarityName}</p>
+                <div className="w-100">
+                  <p><strong>Nombre TCG:</strong> {card.tcgName}</p>
+                  <p><strong>Número de carta:</strong> {card.cardNumber}</p>
+                  <p><strong>Variante de arte:</strong> {card.artVariant}</p>
+                  <p><strong>Nombre del set:</strong> {card.setName}</p>
+                  <p><strong>Rareza:</strong> {card.rarityName}</p>
+                </div>
               </div>
             </div>
           </div>
+          {token && (
+            <div className="card shadow-sm p-4" style={{ maxWidth: 800, width: "100%" }}>
+              <h5>Stock disponible</h5>
+
+              <div className="mb-3 d-flex align-items-end gap-3">
+                <div className="flex-fill">
+                  <label htmlFor="languageSelect" className="form-label">Filtrar por idioma:</label>
+                  <select
+                    id="languageSelect"
+                    className="form-select"
+                    value={selectedLanguage}
+                    onChange={handleLanguageChange}
+                  >
+                    <option value="">Todos</option>
+                    {languages.map(lang => (
+                      <option key={lang.id} value={lang.name}>{lang.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex-fill">
+                  <label htmlFor="conditionSelect" className="form-label">Filtrar por condición:</label>
+                  <select
+                    id="conditionSelect"
+                    className="form-select"
+                    value={selectedCondition}
+                    onChange={handleConditionChange}
+                  >
+                    <option value="">Todas</option>
+                    {conditions.map((cond) => (
+                      <option key={cond.id} value={cond.name}>{cond.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+
+              <StockTable stock={stock} setStock={setStock} />
+
+              <div className="d-flex justify-content-between">
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 0}
+                >
+                  Anterior
+                </button>
+                <span>Página {page + 1} de {totalPages}</span>
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page + 1 >= totalPages}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        {token && (
-          <div className="card shadow-sm p-4" style={{ maxWidth: 600, width: "100%" }}>
-            <h5>Stock disponible</h5>
-
-            <div className="mb-3">
-              <label htmlFor="languageSelect" className="form-label">Filtrar por idioma:</label>
-              <select
-                id="languageSelect"
-                className="form-select"
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-              >
-                <option value="">Todos</option>
-                {languages.map(lang => (
-                  <option key={lang.id} value={lang.name}>{lang.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="table-responsive">
-              <table className="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>Idioma</th>
-                    <th>Condición</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stock.map(s => (
-                    <tr key={s.id}>
-                      <td>{s.language}</td>
-                      <td>{s.condition}</td>
-                      <td>{s.quantity}</td>
-                      <td>${s.price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="d-flex justify-content-between">
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 0}
-              >
-                Anterior
-              </button>
-              <span>Página {page + 1} de {totalPages}</span>
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page + 1 >= totalPages}
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
-  </div>
   );
 };
 

@@ -21,6 +21,8 @@ public class SecurityConfig {
 
     private final JwtGenerator jwtGenerator;
 
+    private String admin = "ADMIN";
+
     public SecurityConfig(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;
     }
@@ -34,13 +36,28 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/user/**").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/user/**").authenticated()
                 .requestMatchers(HttpMethod.GET, "/cards/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/user/enableStore").hasRole("USER")
-                .requestMatchers(HttpMethod.POST, "/cardStock/add").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/user/enableStore").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cardStock/add").authenticated()
                 .requestMatchers(HttpMethod.GET, "/cardStock/languages").permitAll()
                 .requestMatchers(HttpMethod.GET, "/cardStock/conditions").permitAll()
-                .requestMatchers(HttpMethod.GET, "/cardStock/find").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/cardStock/find").authenticated()
+                .requestMatchers(HttpMethod.GET, "/cardStock/seller").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cardStock/delete").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cart").authenticated()
+                .requestMatchers(HttpMethod.GET, "/cart").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cart/delete").authenticated()
+                .requestMatchers(HttpMethod.POST, "/cart/buy").authenticated()
+                .requestMatchers(HttpMethod.GET, "/orders").authenticated()
+                .requestMatchers(HttpMethod.POST, "/orders/sent").authenticated()
+                .requestMatchers(HttpMethod.GET, "/orders/seller").authenticated()
+                .requestMatchers(HttpMethod.GET, "/orders/lines").authenticated()
+                .requestMatchers(HttpMethod.POST, "/orders/review").authenticated()
+                .requestMatchers(HttpMethod.POST, "/admin/deleteCard").hasRole(admin)
+                .requestMatchers(HttpMethod.POST, "/admin/deleteStock").hasRole(admin)
+                .requestMatchers(HttpMethod.POST, "/admin/deleteUser").hasRole(admin)
+                .requestMatchers(HttpMethod.GET, "/admin/getUsers").hasRole(admin)
                 .anyRequest().denyAll()
             );
 

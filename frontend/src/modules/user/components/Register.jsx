@@ -7,6 +7,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState(""); 
 
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(null);
@@ -42,6 +43,10 @@ const Register = () => {
       newErrors.lastName = "Los apellidos son obligatorios";
     }
 
+    if (!address.trim()) {
+      newErrors.address = "La dirección es obligatoria";
+    }
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -67,6 +72,7 @@ const Register = () => {
           email,
           firstName,
           lastName,
+          address,
         }),
       });
 
@@ -112,6 +118,19 @@ const Register = () => {
                 autoComplete="family-name"
               />
               {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
+            </div>
+
+            <div className="mb-3">
+              <input
+                id="address"
+                type="text"
+                className={`form-control ${errors.address ? "is-invalid" : ""}`}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Dirección"
+                autoComplete="street-address"
+              />
+              {errors.address && <div className="invalid-feedback">{errors.address}</div>}
             </div>
 
             <div className="mb-3">

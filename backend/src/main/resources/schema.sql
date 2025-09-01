@@ -27,6 +27,7 @@ CREATE TABLE users (
     isStore BOOLEAN NOT NULL DEFAULT FALSE,
     role VARCHAR(50) NOT NULL,
     locationid INT,
+    address VARCHAR(100) NOT NULL,
     FOREIGN KEY (locationid) REFERENCES locations(id)
 );
 
@@ -82,13 +83,14 @@ CREATE TABLE cardStock (
     sellerid INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
+    cartQuantity INT NOT NULL,
     conditionid INT NOT NULL,
     comment VARCHAR(100),
     lang INT NOT NULL,
     FOREIGN KEY (conditionid) REFERENCES condition(id),
     FOREIGN KEY (lang) REFERENCES cardLanguage(id),
-    FOREIGN KEY (cardid) REFERENCES card(id),
-    FOREIGN KEY (sellerid) REFERENCES users(id)
+    FOREIGN KEY (cardid) REFERENCES card(id) ON DELETE CASCADE,
+    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart (
@@ -96,8 +98,8 @@ CREATE TABLE cart (
     cardStockid INT NOT NULL,
     quantity INT NOT NULL,
     userid INT NOT NULL,
-    FOREIGN KEY (cardStockid) REFERENCES cardStock(id),
-    FOREIGN KEY (userid) REFERENCES users(id)
+    FOREIGN KEY (cardStockid) REFERENCES cardStock(id) ON DELETE CASCADE,
+    FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderTable (
@@ -105,7 +107,12 @@ CREATE TABLE orderTable (
     orderDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     rating INT,
     review VARCHAR(100),
-    arrivalDate TIMESTAMP
+    arrivalDate TIMESTAMP,
+    buyerid INT NOT NULL,
+    sellerid INT NOT NULL,
+    isSent BOOLEAN NOT NULL,
+    FOREIGN KEY (buyerid) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (sellerid) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderLine (
@@ -116,8 +123,8 @@ CREATE TABLE orderLine (
     price NUMERIC(10,2) NOT NULL,
     quantity INT NOT NULL,
     condition VARCHAR(50) NOT NULL,
-    FOREIGN KEY (orderid) REFERENCES orderTable(id),
-    FOREIGN KEY (cardid) REFERENCES card(id)
+    FOREIGN KEY (orderid) REFERENCES orderTable(id) ON DELETE CASCADE,
+    FOREIGN KEY (cardid) REFERENCES card(id) ON DELETE CASCADE
 );
 
 INSERT INTO condition (name, initial) VALUES
@@ -166,7 +173,39 @@ INSERT INTO card (name, tcgid, setid, rarityid, cardNumber, artVariant, imagen) 
 ('Pidgeot', 1, 2, 3, '8', 'Base', null),
 ('Black lotus', 2, 3, 6, '50', 'Base', null),
 ('Ancestral Recall', 2, 3, 6, '23', 'Base', null),
-('Cursed Land', 2, 2, 5, '84', 'Base', null),
+('Cursed Land', 2, 3, 5, '84', 'Base', null),
 ('The Aetherspark', 2, 4, 7, '231', 'Base', null),
 ('Chandra, Spark Hunter', 2, 4, 7, '411', 'Fracture Foil', null),
 ('Chandra, Spark Hunter ', 2, 4, 7, '401', 'Foil', null);
+
+INSERT INTO locations (latitude, longitude) VALUES
+(40.4168, -3.7038),
+(41.3874, 2.1686);
+
+INSERT INTO users (username, firstName, lastName, email, password, isStore, role, locationid, address) VALUES
+('adminS', 'Laura', 'Gómez', 'admin_store@example.com',
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'ADMIN', 1, 'Calle de Ruifino González 24, 5ºC, Madrid, España'),
+('adminU', 'Carlos', 'Pérez', 'admin_user@example.com',
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'ADMIN', NULL, 'Calle Maria Blanchard 13, 3ºD, Santander, España'),
+('userS', 'María', 'López', 'store_user@example.com',
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', TRUE, 'USER', 2, 'Calle de Balmes 229, 4ºB, Barcelona, España'),
+('userU', 'José', 'Martínez', 'normal_user@example.com',
+'$2b$12$hoQ6RI8v8JtFWTOkWMXu7uaZuOTQpmUMT5j/rY5zjDgC2xG.Prs4m', FALSE, 'USER', NULL, 'Calle Alfredo Vicenti 15, 2ªA, A Coruña, España');
+
+INSERT INTO cardStock (cardid, sellerid, price, quantity, conditionid, comment, lang, cartQuantity) VALUES
+(14, (1), 5.01, 10, 1, 'Como nueva', 1, 0),
+(14, (1), 4.50, 8, 2, 'Ligero desgaste', 1, 0),
+(14, (1), 3.20, 15, 3, 'Usada pero jugable', 2, 0),
+(14, (1), 6.00, 5, 1, 'Edición en inglés impecable', 2, 0),
+(14, (1), 2.50, 12, 4, 'Muy jugada', 3, 0),
+(14, (1), 7.00, 4, 1, 'Rara de conseguir', 3, 0),
+(14, (1), 3.80, 6, 2, 'Buena calidad general', 1, 0),
+(14, (1), 1.50, 20, 5, 'Estado malo', 2, 0),
+(14, (3), 5.20, 9, 1, 'Perfecta en español', 1, 0),
+(14, (3), 4.80, 7, 2, 'Buena, poco uso', 1, 0),
+(14, (3), 3.10, 10, 3, 'Bastante jugada', 2, 0),
+(14, (3), 6.50, 3, 1, 'Inglés casi perfecta', 2, 0),
+(14, (3), 2.80, 11, 4, 'Muy usada', 3, 0),
+(14, (3), 7.20, 2, 1, 'Edición difícil', 3, 0),
+(14, (3), 3.60, 5, 2, 'Estado decente', 1, 0);
+

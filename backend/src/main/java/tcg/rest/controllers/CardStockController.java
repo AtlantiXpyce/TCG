@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +21,13 @@ import tcg.model.entities.CardLanguage;
 import tcg.model.entities.CardStock;
 import tcg.model.entities.Condition;
 import tcg.model.exceptions.CardNotFoundException;
+import tcg.model.exceptions.CardStockNotFoundException;
+import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
 import tcg.model.services.CardLanguageService;
 import tcg.model.services.CardStockService;
 import tcg.model.services.ConditionService;
 import tcg.rest.common.JwtGenerator;
-import tcg.rest.dtos.AddCardStockConversor;
 import tcg.rest.dtos.AddCardStockDto;
 import tcg.rest.dtos.CardStockConversor;
 import tcg.rest.dtos.CardStockDto;
@@ -49,6 +53,21 @@ public class CardStockController {
     @Autowired
     private ConditionService conditionService;
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(CardStockNotFoundException.class)
+    public ResponseEntity<String> handleCardStockNotFoundException(CardStockNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotTheUserException.class)
+    public ResponseEntity<String> handleNotTheUserException(NotTheUserException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
     @PostMapping("/add")
     public CardStockDto sellCard(@RequestBody AddCardStockDto dto, HttpServletRequest request) throws CardNotFoundException, UserNotFoundException{
 
@@ -73,16 +92,39 @@ public class CardStockController {
     }
 
     @GetMapping("/find")
-    public Page<CardStockDto> findStock( @RequestParam(required = true) Long id, @RequestParam(required = false) String language, int page) {
+    public Page<CardStockDto> findStock(@RequestParam(required = true) Long id, @RequestParam(required = false) String language, String condition, int page) {
         Pageable pageable = createPageable(page);
-        Page<CardStock> cardPage = cardStockService.findStock(id, language, pageable);
+        Page<CardStock> cardPage = cardStockService.findStock(id, language, condition, pageable);
         return CardStockConversor.toCardStockDtos(cardPage);
     }
 
-        public Pageable createPageable(Integer page) {
+    @GetMapping("/seller")
+    public Page<CardStockDto> findStockSeller(@RequestParam(required = true) Long sellerId, int page, HttpServletRequest request) throws NotTheUserException, UserNotFoundException{
+        Pageable pageable = createPageable(page);
+
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+        if(authId != sellerId){
+            throw new NotTheUserException();
+        }
+        
+        return CardStockConversor.toCardStockDtos(cardStockService.getSellerStocks(sellerId, pageable));
+    }
+
+    @PostMapping("/delete")
+    public void deleteStock(@RequestParam(required = true) Long sellerId, @RequestParam(required = true) Long stockId, HttpServletRequest request) throws NotTheUserException, UserNotFoundException, CardStockNotFoundException{
+        String token = request.getHeader("Authorization").substring(7);
+        Long authId = jwtGenerator.getIdFromToken(token);
+        if(authId != sellerId){
+            throw new NotTheUserException();
+        }
+        cardStockService.deleteStock(stockId, sellerId);
+    }
+
+    public Pageable createPageable(Integer page) {
         if(page == null || page < 0){
             page = 0;
         }
-        return PageRequest.of(page, 20);
+        return PageRequest.of(page, 10);
     }
 }

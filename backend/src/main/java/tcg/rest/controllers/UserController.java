@@ -19,6 +19,7 @@ import tcg.model.exceptions.AlreadyStoreException;
 import tcg.model.exceptions.IncorrectParamsException;
 import tcg.model.exceptions.NotTheUserException;
 import tcg.model.exceptions.UserNotFoundException;
+import tcg.model.services.OrderService;
 import tcg.model.services.UserService;
 import tcg.rest.common.JwtGenerator;
 import tcg.rest.dtos.LoginRequest;
@@ -38,6 +39,9 @@ public class UserController {
     @Autowired
     private UserService userService;
     
+    @Autowired
+    private OrderService orderService;
+
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<String> handleAlreadyExistsException(AlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
@@ -73,6 +77,7 @@ public class UserController {
         user.setLastName(request.getLastName());
         user.setStore(false); 
         user.setRole("USER");
+        user.setAddress(request.getAddress());
         userService.register(user);
         UserResponse response = new UserResponse(user);
         return ResponseEntity.ok(response);
@@ -82,17 +87,18 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws UserNotFoundException {
         User user = userService.login(request.getUsername(), request.getPassword());
         String token = jwtGenerator.generateToken(user);
-        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole(), user.getId()));
+        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole(), user.getId(),user.isStore()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserProfileDto> profile(@PathVariable Long id) throws UserNotFoundException{
         User user = userService.getUser(id);
+        Double rating = null;
         if(user.isStore()){
-            return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),user.getLocation().getLongitude(),user.getLocation().getLatitude()));
+            rating = orderService.getAverageRatingForSeller(id);
+            return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),user.getLocation().getLongitude(),user.getLocation().getLatitude(), rating));
         }else
-        return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),Double.valueOf(190),Double.valueOf(190)));
-        
+            return ResponseEntity.ok(new UserProfileDto(user.getId(),user.getUsername(),user.getFirstName(),user.isStore(),Double.valueOf(190),Double.valueOf(190), rating));
     }
     
     @PostMapping("/enableStore")

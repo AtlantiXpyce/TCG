@@ -1,6 +1,7 @@
-import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Header from './modules/app/Header';
 import Footer from './modules/app/Footer';
@@ -10,6 +11,13 @@ import UserProfile from './modules/user/components/Profile';
 import CardDetails from "./modules/cards/components/CardDetails";
 import CardSearch from './modules/cards/components/CardSearch';
 import AddCardStock from "./modules/cardStock/components/AddCardStock.jsx";
+import CartPage from "./modules/cart/components/CartPage.jsx";
+import OrderSummaryPage from "./modules/cart/components/OrderSummary.jsx";
+import OrdersBuyer from "./modules/orders/components/OrdersBuyer.jsx";
+import OrderDetails from "./modules/orders/components/OrderDetails.jsx";
+import MyStock from "./modules/cardStock/components/MyStock.jsx";
+import AdminUserList from "./modules/admin/components/AdminUserList.jsx";
+import OrdersSeller from "./modules/orders/components/OrdersSeller.jsx";
 
 
 const Content = () => {
@@ -28,6 +36,13 @@ const Content = () => {
         <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/cards/:id" element={<CardDetails />} />
         <Route path="/sell/:cardId" element={<AddCardStock />} />
+        <Route path="/cart" element={<CartPage />} />      
+        <Route path="/orderSummary" element={<OrderSummaryPage />} />      
+        <Route path="/ordersBuyer" element={<OrdersBuyer />} />
+        <Route path="/order/:id" element={<OrderDetails />} />
+        <Route path="/mystock" element={<MyStock />} />
+        <Route path="/admin" element={<AdminUserList />} />
+        <Route path="/orderSeller" element={<OrdersSeller />} />        
       </Routes>
     </main>
   );
